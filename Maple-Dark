@@ -6,7 +6,7 @@ local LibraryName = tostring(math.random(100000,200000))..tostring(math.random(1
 local Theme = {
     Background = Color3.fromRGB(15, 15, 20), -- Darker main background
     SecondaryBackground = Color3.fromRGB(22, 22, 28), -- Sidebar background
-    ContrastBackground = Color3.fromRGB(30, 30, 38), -- Interactive elements
+    ContrastBackground = Color3.fromRGB(32, 32, 40), -- Improved interactive elements
     AccentColor = Color3.fromRGB(90, 90, 255), -- Deep blue accent
     HoverColor = Color3.fromRGB(100, 100, 255), -- Slightly lighter accent for hover states
     LightText = Color3.fromRGB(240, 240, 245), -- Slightly off-white text
@@ -182,7 +182,7 @@ function Library:Create(xHubName, xGameName)
     ActualSide.BackgroundTransparency = 1.000
     ActualSide.BorderSizePixel = 0
     ActualSide.Position = UDim2.new(0, 0, 0.173, 0) -- Simplified UDim2
-    ActualSide.Size = UDim2.new(1, -1, 1, -64) -- Adjusted size calculation
+    ActualSide.Size = UDim2.new(1, -1, 1, -124) -- Adjusted for player info at bottom
     ActualSide.CanvasSize = UDim2.new(0,0,0,0)
     ActualSide.ScrollBarThickness = 3 -- Slightly thicker scrollbar
     ActualSide.ScrollBarImageColor3 = Theme.AccentColor
@@ -204,7 +204,7 @@ function Library:Create(xHubName, xGameName)
     GameName.Parent = Sidebar
     GameName.BackgroundTransparency = 1.000
     GameName.BorderSizePixel = 0
-    GameName.Position = UDim2.new(0, 0, 0.081, 0) -- Simplified UDim2
+    GameName.Position = UDim2.new(0, 0, 0.070, 0) -- Moved up slightly
     GameName.Size = UDim2.new(1, 0, 0, 25) -- Use scale 1 for width
     GameName.Font = UIFont
     GameName.Text = xGameName
@@ -239,7 +239,8 @@ function Library:Create(xHubName, xGameName)
             -- Use task.defer to wait for layout calculations
             task.defer(function()
                  if TabListLayout and TabListLayout.Parent then -- Ensure layout exists
-                    Tab.CanvasSize = UDim2.new(0, 0, 0, TabListLayout.AbsoluteContentSize.Y + 10)
+                    Tab.CanvasSize = UDim2.new(0, 0, 0, TabListLayout.AbsoluteContentSize.Y + 20) -- Added more padding
+                    Tab.AutomaticCanvasSize = Enum.AutomaticSize.Y -- Enable automatic canvas sizing
                  end
             end)
         end
@@ -254,6 +255,8 @@ function Library:Create(xHubName, xGameName)
         Tab.ScrollBarThickness = 4 -- Consistent scrollbar thickness
         Tab.ScrollBarImageColor3 = Theme.AccentColor
         Tab.ScrollingDirection = Enum.ScrollingDirection.Y -- Explicitly set vertical scrolling
+        Tab.AutomaticCanvasSize = Enum.AutomaticSize.Y -- Enable automatic canvas sizing
+        Tab.CanvasSize = UDim2.new(0, 0, 0, 0) -- Initial canvas size
 
         TabListLayout.Name = "TabListLayout"
         TabListLayout.Parent = Tab
@@ -288,12 +291,18 @@ function Library:Create(xHubName, xGameName)
         ScrollSize()
         Size()
 
-        -- Connect size updates (use task.defer for safety)
-        local function deferredSizeUpdate() task.defer(Size) end
-        Tab.ChildAdded:Connect(deferredSizeUpdate)
-        Tab.ChildRemoved:Connect(deferredSizeUpdate)
+        -- Connect size updates with more robust method
+        local function updateSizes()
+            task.spawn(function() 
+                Size()
+                ScrollSize()
+            end)
+        end
+
+        Tab.ChildAdded:Connect(updateSizes)
+        Tab.ChildRemoved:Connect(updateSizes)
         if TabListLayout then
-             TabListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(deferredSizeUpdate)
+             TabListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateSizes)
         end
 
 
@@ -1086,7 +1095,7 @@ function Library:Create(xHubName, xGameName)
                 Option.Name = tostring(optionText).."_Option"
                 Option.Parent = DropList
                 Option.BackgroundColor3 = Theme.ContrastBackground
-                Option.Size = UDim2.new(1, -10, 0, 30) -- Slightly smaller height, adjust width for padding
+                Option.Size = UDim2.new(1, -6, 0, 28) -- Slightly smaller size for better appearance
                 Option.Font = UIFont
                 Option.Text = optionText
                 Option.TextColor3 = Theme.LightText
@@ -1142,10 +1151,10 @@ function Library:Create(xHubName, xGameName)
                     DropList.Visible = true
                     UpdateDropListLayout() -- Update canvas size before calculating height
 
-                    -- Calculate target height based on content, capped at max height
-                    local contentHeight = DropList.CanvasSize.Y.Offset
+                    -- Calculate target height based on content, with better spacing
+                    local contentHeight = DropListLayout.AbsoluteContentSize.Y + 6 -- Add just enough padding
                     targetListHeight = math.min(contentHeight, maxDropdownHeight)
-                    targetContainerHeight = 35 + targetListHeight + 3 -- Add gap offset
+                    targetContainerHeight = 35 + targetListHeight + 3 -- Add minimal gap offset
 
                     -- Animate opening
                     tweenService:Create(DropList, tweenInfo, { Size = UDim2.new(1, 0, 0, targetListHeight) }):Play()
@@ -1154,7 +1163,9 @@ function Library:Create(xHubName, xGameName)
                     DropdownContainer.ZIndex = 10 -- Bring container forward when open
                     DropdownFrame.ZIndex = 11
                     DropList.ZIndex = 12
-
+                    
+                    -- Update parent tab to ensure scrolling works
+                    Size()
                 else
                     -- Animate closing
                     local listTween = tweenService:Create(DropList, tweenInfo, { Size = UDim2.new(1, 0, 0, 0) })
@@ -1167,14 +1178,15 @@ function Library:Create(xHubName, xGameName)
                     listTween.Completed:Once(function()
                         if not opened then -- Check if still closed
                             DropList.Visible = false
-                            DropdownContainer.ClipsDescendants = true -- Clip again when closed (optional)
+                            DropdownContainer.ClipsDescendants = true -- Clip again when closed
                             DropdownContainer.ZIndex = 5 -- Reset ZIndex
                             DropdownFrame.ZIndex = 6
                         end
                         Size() -- Update Tab scroll size after closing
                     end)
                 end
-                 Size() -- Update Tab scroll size immediately when opening/starting to close
+                Size() -- Update Tab scroll size immediately when opening/starting to close
+                ScrollSize() -- Also update the sidebar scroll
             end
 
             -- Button hover animations
@@ -1228,4 +1240,70 @@ function Library:Create(xHubName, xGameName)
     end
     return xTabs
 end
+
+-- Add profile picture and username at bottom of sidebar
+local PlayerInfo = Instance.new("Frame")
+local PlayerAvatar = Instance.new("ImageLabel")
+local PlayerAvatarCorner = Instance.new("UICorner")
+local PlayerName = Instance.new("TextLabel")
+
+PlayerInfo.Name = "PlayerInfo"
+PlayerInfo.Parent = Sidebar
+PlayerInfo.BackgroundTransparency = 1
+PlayerInfo.Position = UDim2.new(0, 0, 1, -60) -- Position at bottom with 60px height
+PlayerInfo.Size = UDim2.new(1, 0, 0, 60)
+PlayerInfo.AnchorPoint = Vector2.new(0, 1) -- Anchor to bottom
+PlayerInfo.ZIndex = 5
+
+PlayerAvatar.Name = "PlayerAvatar"
+PlayerAvatar.Parent = PlayerInfo
+PlayerAvatar.BackgroundColor3 = Theme.ContrastBackground
+PlayerAvatar.Position = UDim2.new(0, 10, 0, 5)
+PlayerAvatar.Size = UDim2.new(0, 40, 0, 40)
+PlayerAvatar.AnchorPoint = Vector2.new(0, 0)
+PlayerAvatar.ZIndex = 6
+
+-- Get player avatar
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+if player then
+    -- Try to get player avatar
+    local userId = player.UserId
+    local thumbType = Enum.ThumbnailType.HeadShot
+    local thumbSize = Enum.ThumbnailSize.Size420x420
+    
+    local content = nil
+    pcall(function()
+        content = Players:GetUserThumbnailAsync(userId, thumbType, thumbSize)
+    end)
+    
+    PlayerAvatar.Image = content or ""
+end
+
+PlayerAvatarCorner.CornerRadius = UDim.new(1, 0) -- Circle
+PlayerAvatarCorner.Parent = PlayerAvatar
+
+PlayerName.Name = "PlayerName"
+PlayerName.Parent = PlayerInfo
+PlayerName.BackgroundTransparency = 1
+PlayerName.Position = UDim2.new(0, 60, 0, 15)
+PlayerName.Size = UDim2.new(1, -70, 0, 20)
+PlayerName.Font = UIFont
+PlayerName.TextColor3 = Theme.LightText
+PlayerName.TextSize = 14.000
+PlayerName.TextXAlignment = Enum.TextXAlignment.Left
+PlayerName.Text = player and player.Name or "Player"
+PlayerName.ZIndex = 6
+
+-- Add separator line above player info
+local PlayerInfoLine = Instance.new("Frame")
+PlayerInfoLine.Name = "PlayerInfoLine"
+PlayerInfoLine.Parent = Sidebar
+PlayerInfoLine.BackgroundColor3 = Theme.Shadow
+PlayerInfoLine.BorderSizePixel = 0
+PlayerInfoLine.Position = UDim2.new(0, 10, 1, -60)
+PlayerInfoLine.Size = UDim2.new(1, -20, 0, 1)
+PlayerInfoLine.AnchorPoint = Vector2.new(0, 1)
+PlayerInfoLine.ZIndex = 5
+
 return Library
