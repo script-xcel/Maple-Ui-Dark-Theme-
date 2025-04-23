@@ -885,7 +885,7 @@ function Library:Create(xHubName,xGameName)
                         }):Play()
                     end)
                 end
-            }
+            end
 
             DropdownButton.MouseEnter:Connect(function()
                 game:GetService("TweenService"):Create(DropdownFrame, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
