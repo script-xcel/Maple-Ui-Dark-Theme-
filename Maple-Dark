@@ -78,6 +78,29 @@ function Library:Create(xHubName,xGameName)
     DropdownContainer.ZIndex = 9999
     DropdownContainer.Visible = false
 
+    -- Create the ActiveDropList here so it's available globally to all dropdowns
+    local ActiveDropList = Instance.new("Frame")
+    ActiveDropList.Name = "ActiveDropList"
+    ActiveDropList.Parent = DropdownContainer
+    ActiveDropList.BackgroundColor3 = Color3.fromRGB(35, 37, 52)
+    ActiveDropList.BorderSizePixel = 0
+    ActiveDropList.Size = UDim2.new(0, 408, 0, 0)
+    ActiveDropList.ZIndex = 10000
+    ActiveDropList.Visible = false
+    ActiveDropList.ClipsDescendants = true
+
+    local DropListCorner = Instance.new("UICorner")
+    DropListCorner.CornerRadius = UDim.new(0, 6)
+    DropListCorner.Name = "DropListCorner"
+    DropListCorner.Parent = ActiveDropList
+
+    local DropListLayout = Instance.new("UIListLayout")
+    DropListLayout.Name = "DropListLayout"
+    DropListLayout.Parent = ActiveDropList
+    DropListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    DropListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    DropListLayout.Padding = UDim.new(0, 3)
+    
     local PlayerProfile = Instance.new("Frame")
     PlayerProfile.Name = "PlayerProfile"
     PlayerProfile.Parent = ScreenGui
@@ -779,29 +802,6 @@ function Library:Create(xHubName,xGameName)
             local DropdownNamePadding = Instance.new("UIPadding")
             local DropdownIcon = Instance.new("ImageButton")
             local DropdownButton = Instance.new("TextButton")
-
-            -- Fixed dropdown list at root level - will be shown on top of everything
-            local ActiveDropList = Instance.new("Frame")
-            ActiveDropList.Name = "ActiveDropList"
-            ActiveDropList.Parent = DropdownContainer
-            ActiveDropList.BackgroundColor3 = Color3.fromRGB(35, 37, 52) -- Slightly lighter for dropdown
-            ActiveDropList.BorderSizePixel = 0
-            ActiveDropList.Size = UDim2.new(0, 408, 0, 0)
-            ActiveDropList.ZIndex = 10000
-            ActiveDropList.Visible = false
-            ActiveDropList.ClipsDescendants = true
-
-            local DropListCorner = Instance.new("UICorner")
-            DropListCorner.CornerRadius = UDim.new(0, 6)
-            DropListCorner.Name = "DropListCorner"
-            DropListCorner.Parent = ActiveDropList
-
-            local DropListLayout = Instance.new("UIListLayout")
-            DropListLayout.Name = "DropListLayout"
-            DropListLayout.Parent = ActiveDropList
-            DropListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-            DropListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-            DropListLayout.Padding = UDim.new(0, 3)
 
             DropdownFrame.Name = tostring(Name).."_Dropdown"
             DropdownFrame.Parent = Tab
