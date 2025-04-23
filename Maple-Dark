@@ -16,6 +16,9 @@ local Theme = {
     Error = Color3.fromRGB(220, 75, 75) -- Red for error states
 }
 
+-- Set font to a better, modern one
+local UIFont = Enum.Font.GothamSemibold
+
 -- Toggle UI visibility
 function Library:Toggle()
     if game.CoreGui:FindFirstChild(LibraryName).Enabled then 
@@ -156,7 +159,7 @@ function Library:Create(xHubName, xGameName)
     HubName.BorderSizePixel = 0
     HubName.Position = UDim2.new(0, 0, 0.024324324, 0)
     HubName.Size = UDim2.new(0, 140, 0, 21)
-    HubName.Font = Enum.Font.GothamBold
+    HubName.Font = UIFont
     HubName.Text = xHubName
     HubName.TextColor3 = Theme.LightText
     HubName.TextSize = 16.000
@@ -198,7 +201,7 @@ function Library:Create(xHubName, xGameName)
     GameName.BorderSizePixel = 0
     GameName.Position = UDim2.new(-0.00714285718, 0, 0.0810810775, 0)
     GameName.Size = UDim2.new(0, 141, 0, 25)
-    GameName.Font = Enum.Font.Gotham
+    GameName.Font = UIFont
     GameName.Text = xGameName
     GameName.TextColor3 = Theme.DimText
     GameName.TextSize = 14.000
@@ -255,7 +258,7 @@ function Library:Create(xHubName, xGameName)
         TabButton.Size = UDim2.new(0, 130, 0, 35)
         TabButton.Position = UDim2.new(0.5, 0, 0, 0)
         TabButton.AnchorPoint = Vector2.new(0.5, 0)
-        TabButton.Font = Enum.Font.GothamSemibold
+        TabButton.Font = UIFont
         TabButton.Text = "  " .. Name
         TabButton.TextColor3 = xVisible and Theme.LightText or Theme.DimText
         TabButton.TextSize = 14.000
@@ -337,7 +340,7 @@ function Library:Create(xHubName, xGameName)
             Label.BackgroundTransparency = 1.000
             Label.BorderSizePixel = 0
             Label.Size = UDim2.new(0, 408, 0, 35)
-            Label.Font = Enum.Font.GothamSemibold
+            Label.Font = UIFont
             Label.Text = Name
             Label.TextColor3 = Theme.LightText
             Label.TextSize = 16.000
@@ -384,7 +387,7 @@ function Library:Create(xHubName, xGameName)
             Button.Parent = ButtonFrame
             Button.BackgroundColor3 = Theme.ContrastBackground
             Button.Size = UDim2.new(0, 408, 0, 35)
-            Button.Font = Enum.Font.GothamSemibold
+            Button.Font = UIFont
             Button.TextColor3 = Theme.LightText
             Button.TextSize = 14.000
             Button.Text = Name
@@ -410,31 +413,66 @@ function Library:Create(xHubName, xGameName)
             ButtonIcon.ImageRectSize = Vector2.new(36, 36)
             ButtonIcon.ImageColor3 = Theme.LightText
 
+            -- Create ripple effect for button
+            local function CreateRipple()
+                local Ripple = Instance.new("Frame")
+                local RippleCorner = Instance.new("UICorner")
+                
+                Ripple.Name = "Ripple"
+                Ripple.Parent = Button
+                Ripple.AnchorPoint = Vector2.new(0.5, 0.5)
+                Ripple.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+                Ripple.BackgroundTransparency = 0.85
+                Ripple.Position = UDim2.new(0.5, 0, 0.5, 0)
+                Ripple.Size = UDim2.new(0, 0, 0, 0)
+                Ripple.ZIndex = 1
+                
+                RippleCorner.CornerRadius = UDim.new(1, 0)
+                RippleCorner.Parent = Ripple
+                
+                -- Animate ripple
+                game:GetService("TweenService"):Create(Ripple, TweenInfo.new(0.5, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                    Size = UDim2.new(1, 0, 1, 0),
+                    BackgroundTransparency = 1
+                }):Play()
+                
+                -- Remove ripple after animation
+                game:GetService("Debris"):AddItem(Ripple, 0.5)
+            end
+
             Button.MouseButton1Down:Connect(function()
+                CreateRipple()
+                
                 game:GetService("TweenService"):Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                     BackgroundColor3 = Theme.AccentColor
                 }):Play()
+                
                 game:GetService("TweenService"):Create(ButtonIcon, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                     ImageColor3 = Theme.LightText,
                     Size = UDim2.new(0, 18, 0, 18)
                 }):Play()
+                
                 wait(0.1)
+                
                 game:GetService("TweenService"):Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                     BackgroundColor3 = Theme.ContrastBackground
                 }):Play()
+                
                 game:GetService("TweenService"):Create(ButtonIcon, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                     Size = UDim2.new(0, 20, 0, 20)
                 }):Play()
+                
                 pcall(Callback)
             end)
 
             Button.MouseEnter:Connect(function()
-                game:GetService("TweenService"):Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                game:GetService("TweenService"):Create(Button, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                     BackgroundColor3 = Color3.fromRGB(40, 40, 48)
                 }):Play()
             end)
+            
             Button.MouseLeave:Connect(function()
-                game:GetService("TweenService"):Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                game:GetService("TweenService"):Create(Button, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                     BackgroundColor3 = Theme.ContrastBackground
                 }):Play()
             end)
@@ -443,6 +481,7 @@ function Library:Create(xHubName, xGameName)
                 Button.Text = Name
                 ButtonFrame.Name = tostring(Name).."_Button"
             end
+            
             return ButtonFunction
         end
 
@@ -455,9 +494,12 @@ function Library:Create(xHubName, xGameName)
             local ToggleNamePadding = Instance.new("UIPadding")
             local ToggleFrameCorner = Instance.new("UICorner")
             local ToggleCorner = Instance.new("UICorner")
-            local ToggleCircle = Instance.new("ImageLabel")
-            local ToggleButton = Instance.new("TextButton")
             local ToggleF = Instance.new("Frame")
+            local ToggleButton = Instance.new("TextButton")
+            
+            -- Use a modern circle toggle indicator rather than image
+            local ToggleCircle = Instance.new("Frame")
+            local ToggleCircleCorner = Instance.new("UICorner")
 
             ToggleFrame.Name = tostring(Name).."_Toggle"
             ToggleFrame.Parent = Tab
@@ -471,7 +513,7 @@ function Library:Create(xHubName, xGameName)
             ToggleName.BackgroundTransparency = 1.000
             ToggleName.BorderSizePixel = 0
             ToggleName.Size = UDim2.new(0, 347, 0, 35)
-            ToggleName.Font = Enum.Font.GothamSemibold
+            ToggleName.Font = UIFont
             ToggleName.Text = Name
             ToggleName.TextColor3 = Theme.LightText
             ToggleName.TextSize = 14.000
@@ -503,62 +545,96 @@ function Library:Create(xHubName, xGameName)
             ToggleButton.BackgroundTransparency = 1
             ToggleButton.BorderSizePixel = 0
             ToggleButton.Size = UDim2.new(0, 45, 0, 23)
-            ToggleButton.Font = Enum.Font.SourceSans
+            ToggleButton.Font = UIFont
             ToggleButton.Text = ""
             ToggleButton.TextColor3 = Color3.fromRGB(0, 0, 0)
             ToggleButton.TextSize = 14.000
+            ToggleButton.ZIndex = 2
 
             ToggleCircle.Name = "ToggleCircle"
             ToggleCircle.Parent = ToggleF
             ToggleCircle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            ToggleCircle.BackgroundTransparency = 1.000
-            ToggleCircle.Position = UDim2.new(0.093, 0,0.153, 0)
-            ToggleCircle.Size = UDim2.new(0, 17, 0, 17)
-            ToggleCircle.Image = "rbxassetid://3570695787"
-            ToggleCircle.ScaleType = Enum.ScaleType.Slice
-            ToggleCircle.SliceCenter = Rect.new(100, 100, 100, 100)
-            ToggleCircle.SliceScale = 0.120
+            ToggleCircle.Position = UDim2.new(0.09, 0, 0.09, 0)
+            ToggleCircle.Size = UDim2.new(0, 19, 0, 19)
+            ToggleCircle.ZIndex = 3
+
+            ToggleCircleCorner.CornerRadius = UDim.new(1, 0)
+            ToggleCircleCorner.Name = "ToggleCircleCorner"
+            ToggleCircleCorner.Parent = ToggleCircle
+
+            -- Function to toggle the state with smooth animation
+            local function UpdateToggle()
+                if ToggleEnabled then 
+                    game:GetService("TweenService"):Create(ToggleF, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+                        BackgroundColor3 = Theme.AccentColor
+                    }):Play() 
+                    
+                    game:GetService("TweenService"):Create(ToggleCircle, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+                        Position = UDim2.new(0.55, 0, 0.09, 0)
+                    }):Play() 
+                else
+                    game:GetService("TweenService"):Create(ToggleF, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+                        BackgroundColor3 = Color3.fromRGB(40, 40, 48)
+                    }):Play() 
+                    
+                    game:GetService("TweenService"):Create(ToggleCircle, TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out), {
+                        Position = UDim2.new(0.09, 0, 0.09, 0)
+                    }):Play() 
+                end
+            end
 
             ToggleButton.MouseButton1Down:Connect(function()
                 ToggleEnabled = not ToggleEnabled
-                if ToggleEnabled then 
-                    game:GetService("TweenService"):Create(ToggleF, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundColor3 = Theme.AccentColor}):Play() 
-                    game:GetService("TweenService"):Create(ToggleCircle, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = UDim2.new(0.559, 0,0.153, 0)}):Play() 
-                else
-                    game:GetService("TweenService"):Create(ToggleF, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundColor3 = Color3.fromRGB(40, 40, 48)}):Play() 
-                    game:GetService("TweenService"):Create(ToggleCircle, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {Position = UDim2.new(0.093, 0,0.153, 0)}):Play() 
-                end
+                UpdateToggle()
                 pcall(Callback, ToggleEnabled)
             end)
             
+            -- Hover effects
             ToggleFrame.MouseEnter:Connect(function()
                 if not ToggleEnabled then
-                    game:GetService("TweenService"):Create(ToggleF, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                    game:GetService("TweenService"):Create(ToggleF, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                         BackgroundColor3 = Color3.fromRGB(50, 50, 58)
                     }):Play()
                 end
-                game:GetService("TweenService"):Create(ToggleFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                
+                game:GetService("TweenService"):Create(ToggleFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                     BackgroundColor3 = Color3.fromRGB(35, 35, 43)
                 }):Play()
             end)
             
             ToggleFrame.MouseLeave:Connect(function()
                 if not ToggleEnabled then
-                    game:GetService("TweenService"):Create(ToggleF, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                    game:GetService("TweenService"):Create(ToggleF, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                         BackgroundColor3 = Color3.fromRGB(40, 40, 48)
                     }):Play()
                 end
-                game:GetService("TweenService"):Create(ToggleFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                
+                game:GetService("TweenService"):Create(ToggleFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                     BackgroundColor3 = Theme.ContrastBackground
                 }):Play()
             end)
+            
+            -- Return ToggleFunction table to allow updating the toggle
+            local ToggleFunction = {}
+            
+            function ToggleFunction:UpdateToggle(State)
+                if State ~= nil then
+                    ToggleEnabled = State
+                    UpdateToggle()
+                    pcall(Callback, ToggleEnabled)
+                end
+            end
+            
+            return ToggleFunction
         end
 
-        function Elements:Slider(Name,Min,Max,Callback)
+        function Elements:Slider(Name, Min, Max, Callback)
             local Name = Name or "Slider"
             local Callback = Callback or function() end
             local Max = Max or 500
             local Min = Min or 16
+            local Value = Min
+            
             local SliderFrame = Instance.new("Frame")
             local SliderFrameCorner = Instance.new("UICorner")
             local SliderButton = Instance.new("TextButton")
@@ -569,6 +645,8 @@ function Library:Create(xHubName, xGameName)
             local SliderNamePadding = Instance.new("UIPadding")
             local SliderValue = Instance.new("TextLabel")
             local SliderValuePadding = Instance.new("UIPadding")
+            local SliderCircle = Instance.new("Frame")
+            local SliderCircleCorner = Instance.new("UICorner")
 
             SliderFrame.Name = tostring(Name).."_Slider"
             SliderFrame.Parent = Tab
@@ -577,6 +655,7 @@ function Library:Create(xHubName, xGameName)
 
             SliderFrameCorner.Name = "SliderFrameCorner"
             SliderFrameCorner.Parent = SliderFrame
+            SliderFrameCorner.CornerRadius = UDim.new(0, 4)
 
             SliderButton.Name = "SliderButton"
             SliderButton.Parent = SliderFrame
@@ -584,13 +663,15 @@ function Library:Create(xHubName, xGameName)
             SliderButton.BorderSizePixel = 0
             SliderButton.Position = UDim2.new(0.0242369417, 0, 0.639999986, 0)
             SliderButton.Size = UDim2.new(0, 389, 0, 10)
-            SliderButton.Font = Enum.Font.SourceSans
+            SliderButton.Font = UIFont
             SliderButton.Text = ""
             SliderButton.TextColor3 = Color3.fromRGB(0, 0, 0)
             SliderButton.TextSize = 14.000
+            SliderButton.AutoButtonColor = false
 
             SliderButtonCorner.Name = "SliderButtonCorner"
             SliderButtonCorner.Parent = SliderButton
+            SliderButtonCorner.CornerRadius = UDim.new(1, 0)
 
             SliderTrail.Name = "SliderTrail"
             SliderTrail.Parent = SliderButton
@@ -600,6 +681,21 @@ function Library:Create(xHubName, xGameName)
 
             SliderTrailCorner.Name = "SliderTrailCorner"
             SliderTrailCorner.Parent = SliderTrail
+            SliderTrailCorner.CornerRadius = UDim.new(1, 0)
+            
+            -- Add a circle handle to the slider for better visual feedback
+            SliderCircle.Name = "SliderCircle"
+            SliderCircle.Parent = SliderTrail
+            SliderCircle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            SliderCircle.BorderSizePixel = 0
+            SliderCircle.Position = UDim2.new(1, -8, 0.5, -8)
+            SliderCircle.Size = UDim2.new(0, 16, 0, 16)
+            SliderCircle.ZIndex = 2
+            SliderCircle.AnchorPoint = Vector2.new(0, 0.5)
+            
+            SliderCircleCorner.CornerRadius = UDim.new(1, 0)
+            SliderCircleCorner.Name = "SliderCircleCorner"
+            SliderCircleCorner.Parent = SliderCircle
 
             SliderName.Name = "SliderName"
             SliderName.Parent = SliderFrame
@@ -607,7 +703,7 @@ function Library:Create(xHubName, xGameName)
             SliderName.BackgroundTransparency = 1.000
             SliderName.BorderSizePixel = 0
             SliderName.Size = UDim2.new(0, 320, 0, 26)
-            SliderName.Font = Enum.Font.Gotham
+            SliderName.Font = UIFont
             SliderName.Text = Name
             SliderName.TextColor3 = Theme.LightText
             SliderName.TextSize = 16.000
@@ -622,11 +718,10 @@ function Library:Create(xHubName, xGameName)
             SliderValue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             SliderValue.BackgroundTransparency = 1.000
             SliderValue.BorderSizePixel = 0
-            SliderValue.TextTransparency = 1.000
             SliderValue.Position = UDim2.new(0.802061796, 0, 0, 0)
             SliderValue.Size = UDim2.new(0, 80, 0, 26)
-            SliderValue.Font = Enum.Font.Gotham
-            SliderValue.Text = "Value"
+            SliderValue.Font = UIFont
+            SliderValue.Text = tostring(Min)
             SliderValue.TextColor3 = Theme.LightText
             SliderValue.TextSize = 16.000
             SliderValue.TextXAlignment = Enum.TextXAlignment.Right
@@ -637,45 +732,93 @@ function Library:Create(xHubName, xGameName)
 
             local ms = game.Players.LocalPlayer:GetMouse()
             local uis = game:GetService("UserInputService")
-            local Value
-            local mouse = game:GetService("Players").LocalPlayer:GetMouse();
-
-            SliderButton.MouseButton1Down:Connect(function()
-                game:GetService("TweenService"):Create(SliderValue, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                    TextTransparency = 0
-                }):Play()
-                Value = math.floor((((tonumber(Max) - tonumber(Min)) / 389) * SliderTrail.AbsoluteSize.X) + tonumber(Min)) or 0
+            local mouse = game:GetService("Players").LocalPlayer:GetMouse()
+            
+            -- Function to update slider visually
+            local function UpdateSlider(input)
+                local sizeX = math.clamp((input.Position.X - SliderButton.AbsolutePosition.X) / SliderButton.AbsoluteSize.X, 0, 1)
+                SliderTrail:TweenSize(UDim2.new(sizeX, 0, 0, 10), "Out", "Sine", 0.1, true)
+                
+                Value = math.floor(((Max - Min) * sizeX) + Min)
+                SliderValue.Text = tostring(Value)
+                
                 pcall(function()
                     Callback(Value)
                 end)
-                SliderTrail:TweenSize(UDim2.new(0, math.clamp(mouse.X - SliderTrail.AbsolutePosition.X, 0, 389), 0, 10), "InOut", "Linear", 0.05, true)
-                moveconnection = mouse.Move:Connect(function()
-                    SliderValue.Text = Value
-                    Value = math.floor((((tonumber(Max) - tonumber(Min)) / 389) * SliderTrail.AbsoluteSize.X) + tonumber(Min))
-                    pcall(function()
-                        Callback(Value)
-                    end)
-                    SliderTrail:TweenSize(UDim2.new(0, math.clamp(mouse.X - SliderTrail.AbsolutePosition.X, 0, 389), 0, 10), "InOut", "Linear", 0.05, true)
+            end
+            
+            -- Handle mouse events for slider interaction
+            SliderButton.MouseButton1Down:Connect(function()
+                local moveConnection
+                local releaseConnection
+                
+                -- Show value immediately
+                SliderValue.TextTransparency = 0
+                
+                -- Initial update
+                UpdateSlider({Position = mouse.Position})
+                
+                -- Handle mouse movement while dragging
+                moveConnection = mouse.Move:Connect(function()
+                    UpdateSlider({Position = mouse.Position})
                 end)
-                releaseconnection = uis.InputEnded:Connect(function(Mouse)
-                    if Mouse.UserInputType == Enum.UserInputType.MouseButton1 then
-                        Value = math.floor((((tonumber(Max) - tonumber(Min)) / 389) * SliderTrail.AbsoluteSize.X) + tonumber(Min))
-                        pcall(function()
-                            Callback(Value)
-                        end)
-                        SliderValue.Text = Value
-                        game:GetService("TweenService"):Create(SliderValue, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                            TextTransparency = 1
-                        }):Play()
-                        SliderTrail:TweenSize(UDim2.new(0, math.clamp(mouse.X - SliderTrail.AbsolutePosition.X, 0, 389), 0, 10), "InOut", "Linear", 0.05, true)
-                        moveconnection:Disconnect()
-                        releaseconnection:Disconnect()
+                
+                -- Handle mouse release
+                releaseConnection = uis.InputEnded:Connect(function(input)
+                    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                        moveConnection:Disconnect()
+                        releaseConnection:Disconnect()
                     end
                 end)
             end)
+            
+            -- Hover effects
+            SliderButton.MouseEnter:Connect(function()
+                game:GetService("TweenService"):Create(SliderButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                    BackgroundColor3 = Color3.fromRGB(55, 55, 65)
+                }):Play()
+                
+                -- Show slider value on hover
+                game:GetService("TweenService"):Create(SliderValue, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                    TextTransparency = 0
+                }):Play()
+            end)
+            
+            SliderButton.MouseLeave:Connect(function()
+                game:GetService("TweenService"):Create(SliderButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                    BackgroundColor3 = Color3.fromRGB(45, 45, 55)
+                }):Play()
+                
+                -- Hide slider value unless dragging
+                if not uis:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) then
+                    game:GetService("TweenService"):Create(SliderValue, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                        TextTransparency = 0.5
+                    }):Play()
+                end
+            end)
+            
+            -- Return slider function to allow updating
+            local SliderFunc = {}
+            
+            function SliderFunc:SetValue(NewValue)
+                Value = math.clamp(NewValue, Min, Max)
+                local sizeX = (Value - Min) / (Max - Min)
+                
+                SliderTrail:TweenSize(UDim2.new(sizeX, 0, 0, 10), "Out", "Sine", 0.1, true)
+                SliderValue.Text = tostring(Value)
+                
+                pcall(function()
+                    Callback(Value)
+                end)
+            end
+            
+            -- Initialize with min value
+            SliderFunc:SetValue(Min)
+            
+            return SliderFunc
         end
 
-        function Elements:Textbox(Name,Default,Callback)
+        function Elements:Textbox(Name, Default, Callback)
             local Name = Name or "Textbox"
             local Default = Default or ""
             local Callback = Callback or function() end
@@ -693,6 +836,7 @@ function Library:Create(xHubName, xGameName)
 
             TextboxFrameCorner.Name = "TextboxFrameCorner"
             TextboxFrameCorner.Parent = TextboxFrame
+            TextboxFrameCorner.CornerRadius = UDim.new(0, 4)
 
             TextboxName.Name = "TextboxName"
             TextboxName.Parent = TextboxFrame
@@ -700,7 +844,7 @@ function Library:Create(xHubName, xGameName)
             TextboxName.BackgroundTransparency = 1.000
             TextboxName.BorderSizePixel = 0
             TextboxName.Size = UDim2.new(0, 235, 0, 35)
-            TextboxName.Font = Enum.Font.Gotham
+            TextboxName.Font = UIFont
             TextboxName.Text = Name
             TextboxName.TextColor3 = Theme.LightText
             TextboxName.TextSize = 16.000
@@ -716,28 +860,79 @@ function Library:Create(xHubName, xGameName)
             Textbox.BorderSizePixel = 0
             Textbox.Position = UDim2.new(0.610294104, 0, 0.171428576, 0)
             Textbox.Size = UDim2.new(0, 150, 0, 23)
-            Textbox.Font = Enum.Font.Gotham
+            Textbox.Font = UIFont
             Textbox.PlaceholderColor3 = Color3.fromRGB(180, 180, 180)
             Textbox.PlaceholderText = Default
             Textbox.Text = ""
             Textbox.TextColor3 = Theme.LightText
             Textbox.TextSize = 14.000
+            Textbox.ClearTextOnFocus = false
 
             TextboxCorner.Name = "TextboxCorner"
             TextboxCorner.Parent = Textbox
+            TextboxCorner.CornerRadius = UDim.new(0, 4)
+            
+            -- Add subtle glow effect when focused
+            local TextboxStroke = Instance.new("UIStroke")
+            TextboxStroke.Name = "TextboxStroke"
+            TextboxStroke.Parent = Textbox
+            TextboxStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+            TextboxStroke.Color = Theme.AccentColor
+            TextboxStroke.Transparency = 1
+            TextboxStroke.Thickness = 1.5
 
             Textbox.Focused:Connect(function()
-                game:GetService("TweenService"):Create(Textbox, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                    BackgroundColor3 = Theme.AccentColor
+                game:GetService("TweenService"):Create(Textbox, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                    BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+                }):Play()
+                
+                game:GetService("TweenService"):Create(TextboxStroke, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                    Transparency = 0
                 }):Play()
             end)
 
             Textbox.FocusLost:Connect(function()
-                game:GetService("TweenService"):Create(Textbox, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+                game:GetService("TweenService"):Create(Textbox, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                     BackgroundColor3 = Color3.fromRGB(45, 45, 55)
                 }):Play()
+                
+                game:GetService("TweenService"):Create(TextboxStroke, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                    Transparency = 1
+                }):Play()
+                
                 Callback(Textbox.Text)
             end)
+            
+            -- Hover effects
+            Textbox.MouseEnter:Connect(function()
+                if not Textbox:IsFocused() then
+                    game:GetService("TweenService"):Create(Textbox, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                        BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+                    }):Play()
+                end
+            end)
+            
+            Textbox.MouseLeave:Connect(function()
+                if not Textbox:IsFocused() then
+                    game:GetService("TweenService"):Create(Textbox, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                        BackgroundColor3 = Color3.fromRGB(45, 45, 55)
+                    }):Play()
+                end
+            end)
+            
+            -- Return textbox functions
+            local TextboxFunc = {}
+            
+            function TextboxFunc:SetText(Text)
+                Textbox.Text = Text
+                Callback(Text)
+            end
+            
+            function TextboxFunc:GetText()
+                return Textbox.Text
+            end
+            
+            return TextboxFunc
         end
 
         function Elements:Keybind(Name,xKey,Callback)
@@ -766,7 +961,7 @@ function Library:Create(xHubName, xGameName)
             KeybindName.BackgroundTransparency = 1.000
             KeybindName.BorderSizePixel = 0
             KeybindName.Size = UDim2.new(0, 235, 0, 35)
-            KeybindName.Font = Enum.Font.Gotham
+            KeybindName.Font = UIFont
             KeybindName.Text = Name
             KeybindName.TextColor3 = Theme.LightText
             KeybindName.TextSize = 16.000
@@ -818,9 +1013,10 @@ function Library:Create(xHubName, xGameName)
             local Name = Name or "Dropdown"
             local DropdownFunction = {}
             local Callback = Callback or function() end
-            local DropSize = 35
             local opened = false 
-
+            
+            -- Create a container for the dropdown that will manage all dropdown elements
+            local DropdownContainer = Instance.new("Frame")
             local DropdownFrame = Instance.new("Frame")
             local DropdownFrameCorner = Instance.new("UICorner")
             local DropdownName = Instance.new("TextLabel")
@@ -829,15 +1025,26 @@ function Library:Create(xHubName, xGameName)
             local DropdownButton = Instance.new("TextButton")
             local DropList = Instance.new("Frame")
             local DropListLayout = Instance.new("UIListLayout")
-
+            local DropListPadding = Instance.new("UIPadding")
+            
+            -- Set up the container
+            DropdownContainer.Name = tostring(Name).."_DropdownContainer"
+            DropdownContainer.Parent = Tab
+            DropdownContainer.BackgroundTransparency = 1
+            DropdownContainer.Size = UDim2.new(0, 408, 0, 35) -- Will be adjusted as dropdown opens
+            DropdownContainer.ClipsDescendants = false
+            
+            -- Set up the main frame
             DropdownFrame.Name = tostring(Name).."_Dropdown"
-            DropdownFrame.Parent = Tab
+            DropdownFrame.Parent = DropdownContainer
             DropdownFrame.BackgroundColor3 = Theme.ContrastBackground
             DropdownFrame.BorderSizePixel = 0
             DropdownFrame.Size = UDim2.new(0, 408, 0, 35)
+            DropdownFrame.ZIndex = 10
 
             DropdownFrameCorner.Name = "DropdownFrameCorner"
             DropdownFrameCorner.Parent = DropdownFrame
+            DropdownFrameCorner.CornerRadius = UDim.new(0, 4)
 
             DropdownName.Name = "DropdownName"
             DropdownName.Parent = DropdownFrame
@@ -845,11 +1052,12 @@ function Library:Create(xHubName, xGameName)
             DropdownName.BackgroundTransparency = 1.000
             DropdownName.BorderSizePixel = 0
             DropdownName.Size = UDim2.new(0, 358, 0, 35)
-            DropdownName.Font = Enum.Font.Gotham
+            DropdownName.Font = UIFont
             DropdownName.Text = Name
             DropdownName.TextColor3 = Theme.LightText
             DropdownName.TextSize = 16.000
             DropdownName.TextXAlignment = Enum.TextXAlignment.Left
+            DropdownName.ZIndex = 11
 
             DropdownNamePadding.Name = "DropdownNamePadding"
             DropdownNamePadding.Parent = DropdownName
@@ -860,7 +1068,7 @@ function Library:Create(xHubName, xGameName)
             DropdownIcon.BackgroundTransparency = 1.000
             DropdownIcon.Position = UDim2.new(0.914644599, 0, 0.140659884, 0)
             DropdownIcon.Size = UDim2.new(0, 25, 0, 25)
-            DropdownIcon.ZIndex = 2
+            DropdownIcon.ZIndex = 11
             DropdownIcon.Image = "rbxassetid://3926305904"
             DropdownIcon.ImageRectOffset = Vector2.new(604, 684)
             DropdownIcon.ImageRectSize = Vector2.new(36, 36)
@@ -872,177 +1080,226 @@ function Library:Create(xHubName, xGameName)
             DropdownButton.BackgroundTransparency = 1.000
             DropdownButton.BorderSizePixel = 0
             DropdownButton.Size = UDim2.new(0, 408, 0, 35)
-            DropdownButton.Font = Enum.Font.SourceSans
+            DropdownButton.Font = UIFont
             DropdownButton.Text = ""
             DropdownButton.TextColor3 = Color3.fromRGB(0, 0, 0)
             DropdownButton.TextSize = 14.000
+            DropdownButton.ZIndex = 12
 
+            -- Set up the dropdown list
             DropList.Name = "DropList"
-            DropList.Parent = DropdownFrame
+            DropList.Parent = DropdownContainer
             DropList.BackgroundColor3 = Theme.ContrastBackground
-            DropList.BackgroundTransparency = 1.000
             DropList.BorderSizePixel = 0
-            DropList.ClipsDescendants = true
-            DropList.Size = UDim2.new(0, 408, 0, 35)
-            DropList.ZIndex = 100
-            DropList.Position = UDim2.new(0, 0, 1.14285719, 0)
+            DropList.Position = UDim2.new(0, 0, 0, 35) -- Position it directly below the main frame
+            DropList.Size = UDim2.new(1, 0, 0, 0) -- Start with 0 height
+            DropList.ZIndex = 5
             DropList.Visible = false
+            
+            -- Add corner radius to dropdown list
+            local DropListCorner = Instance.new("UICorner")
+            DropListCorner.CornerRadius = UDim.new(0, 4)
+            DropListCorner.Parent = DropList
 
             DropListLayout.Name = "DropListLayout"
             DropListLayout.Parent = DropList
             DropListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
             DropListLayout.SortOrder = Enum.SortOrder.LayoutOrder
             DropListLayout.Padding = UDim.new(0, 3)
+            
+            DropListPadding.Name = "DropListPadding"
+            DropListPadding.Parent = DropList
+            DropListPadding.PaddingTop = UDim.new(0, 3)
+            DropListPadding.PaddingBottom = UDim.new(0, 3)
 
-            DropListLayout.Changed:Connect(function()
-                Tab.CanvasSize = UDim2.new(0, 0, 0, DropListLayout.AbsoluteContentSize.Y)
-            end)  
+            -- Function to update the dropdown list size
+            local function UpdateDropListSize()
+                local options = DropList:GetChildren()
+                local optionCount = 0
+                
+                for _, option in pairs(options) do
+                    if option:IsA("TextButton") then
+                        optionCount = optionCount + 1
+                    end
+                end
+                
+                local paddingSize = (optionCount + 1) * DropListLayout.Padding.Offset
+                local contentSize = optionCount * 35 + paddingSize
+                
+                return contentSize
+            end
+            
+            -- Function to handle dropdown open/close
+            local function ToggleDropdown()
+                opened = not opened
+                
+                if opened then
+                    -- Show the dropdown
+                    DropList.Visible = true
+                    local contentSize = UpdateDropListSize()
+                    
+                    -- Animate the dropdown opening
+                    game:GetService("TweenService"):Create(DropList, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                        Size = UDim2.new(1, 0, 0, contentSize)
+                    }):Play()
+                    
+                    -- Rotate icon
+                    game:GetService("TweenService"):Create(DropdownIcon, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                        Rotation = 180,
+                        ImageColor3 = Theme.AccentColor
+                    }):Play()
+                    
+                    -- Update canvas size for scrolling
+                    Size()
+                else
+                    -- Animate the dropdown closing
+                    game:GetService("TweenService"):Create(DropList, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                        Size = UDim2.new(1, 0, 0, 0)
+                    }):Play()
+                    
+                    -- Rotate icon back
+                    game:GetService("TweenService"):Create(DropdownIcon, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                        Rotation = 0,
+                        ImageColor3 = Theme.LightText
+                    }):Play()
+                    
+                    -- Wait for animation to complete then hide
+                    wait(0.2)
+                    DropList.Visible = false
+                    
+                    -- Update canvas size for scrolling
+                    Size()
+                end
+            end
 
+            -- Button hover animations
             DropdownButton.MouseEnter:Connect(function()
-                game:GetService("TweenService"):Create(DropdownFrame, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                    BackgroundColor3 = Color3.fromRGB(45, 45, 55)
+                game:GetService("TweenService"):Create(DropdownFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                    BackgroundColor3 = Color3.fromRGB(40, 40, 48)
                 }):Play()
             end)
+            
             DropdownButton.MouseLeave:Connect(function()
-                game:GetService("TweenService"):Create(DropdownFrame, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+                game:GetService("TweenService"):Create(DropdownFrame, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                     BackgroundColor3 = Theme.ContrastBackground
                 }):Play()
             end)
 
-            local function DropElements(x)
-                for i,v in pairs(Tab:GetChildren()) do 
-                    if v:IsA("Frame") and v ~= DropdownFrame then 
-                        v.Visible = x
-                    end
-                end
-            end
+            -- Toggle dropdown when clicked
+            DropdownButton.MouseButton1Down:Connect(ToggleDropdown)
 
-            DropdownButton.MouseButton1Down:Connect(function()
-                if opened then 
-                    Size()
-                    opened = false 
-                    DropList:TweenSize(UDim2.new(0, 408, 0, 35), "InOut", "Linear", 0.1)
-                    wait(0.1)
-                    game:GetService("TweenService"):Create(DropdownIcon, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                        ImageColor3 = Theme.LightText
-                    }):Play()
-                    DropList.Visible = false
-                    Size()
-                else 
-                    opened = true 
-                    DropList.Visible = true
-                    DropList:TweenSize(UDim2.new(0, 408, 0, DropListLayout.AbsoluteContentSize.Y), "InOut", "Linear", 0.1)
-                    Tab.CanvasSize = UDim2.new(0,0,0,DropListLayout.AbsoluteContentSize.Y + 100)
-                    wait(0.1)
-                    game:GetService("TweenService"):Create(DropdownIcon, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                        ImageColor3 = Theme.AccentColor
-                    }):Play()
-                    Tab.CanvasSize = UDim2.new(0,0,0,DropListLayout.AbsoluteContentSize.Y + 100)
-                end 
-            end)  
-
-            for i,v in pairs(Listx) do 
+            -- Add dropdown options
+            for i, v in pairs(Listx) do 
                 local Option = Instance.new("TextButton")
                 local OptionCorner = Instance.new("UICorner")
                 
                 Option.Name = tostring(v).."_Option"
                 Option.Parent = DropList
                 Option.BackgroundColor3 = Theme.ContrastBackground
-                Option.Size = UDim2.new(0, 408, 0, 35)
-                Option.Font = Enum.Font.Gotham
+                Option.Size = UDim2.new(0, 400, 0, 35)
+                Option.Font = UIFont
                 Option.Text = v
                 Option.TextColor3 = Theme.LightText
                 Option.TextSize = 16.000
+                Option.ZIndex = 6
 
                 OptionCorner.Name = "OptionCorner"
                 OptionCorner.Parent = Option
+                OptionCorner.CornerRadius = UDim.new(0, 4)
 
                 Option.MouseButton1Down:Connect(function()
                     Callback(v)
-                    for a,b in pairs(DropList:GetChildren()) do 
+                    for a, b in pairs(DropList:GetChildren()) do 
                         if b:IsA("TextButton") then 
                             b.TextColor3 = Theme.LightText
                         end 
                     end
-                    game:GetService("TweenService"):Create(Option, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+                    
+                    game:GetService("TweenService"):Create(Option, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                         TextColor3 = Theme.AccentColor
                     }):Play()
-                    DropList:TweenSize(UDim2.new(0, 408, 0, 35), "InOut", "Linear", 0.1)
-                    game:GetService("TweenService"):Create(DropdownIcon, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                        ImageColor3 = Theme.LightText
-                    }):Play()
-                    wait(0.1)
-                    DropList.Visible = false
-                    opened = false
-                    DropElements(true)
-                    Size()
+                    
+                    -- Close dropdown after selection
+                    ToggleDropdown()
                 end)
 
                 Option.MouseEnter:Connect(function()
-                    game:GetService("TweenService"):Create(Option, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                        BackgroundColor3 = Color3.fromRGB(45, 45, 55)
+                    game:GetService("TweenService"):Create(Option, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                        BackgroundColor3 = Color3.fromRGB(40, 40, 48)
                     }):Play()
                 end)
+                
                 Option.MouseLeave:Connect(function()
-                    game:GetService("TweenService"):Create(Option, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+                    game:GetService("TweenService"):Create(Option, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                         BackgroundColor3 = Theme.ContrastBackground
                     }):Play()
                 end)
             end
 
+            -- Function to update dropdown options
             function DropdownFunction:UpdateDropdown(List)
-                local List = List or {}
-                for i,v in pairs(List) do 
+                -- Clear existing options
+                for _, child in pairs(DropList:GetChildren()) do
+                    if child:IsA("TextButton") then
+                        child:Destroy()
+                    end
+                end
+                
+                -- Add new options
+                for _, v in pairs(List) do 
                     local Option = Instance.new("TextButton")
                     local OptionCorner = Instance.new("UICorner")
-    
-                    DropSize = DropSize + 35
     
                     Option.Name = tostring(v).."_Option"
                     Option.Parent = DropList
                     Option.BackgroundColor3 = Theme.ContrastBackground
-                    Option.Size = UDim2.new(0, 408, 0, 35)
-                    Option.Font = Enum.Font.Gotham
+                    Option.Size = UDim2.new(0, 400, 0, 35)
+                    Option.Font = UIFont
                     Option.Text = v
                     Option.TextColor3 = Theme.LightText
                     Option.TextSize = 16.000
+                    Option.ZIndex = 6
     
                     OptionCorner.Name = "OptionCorner"
                     OptionCorner.Parent = Option
+                    OptionCorner.CornerRadius = UDim.new(0, 4)
     
                     Option.MouseButton1Down:Connect(function()
                         Callback(v)
-                        for a,b in pairs(DropList:GetChildren()) do 
+                        for a, b in pairs(DropList:GetChildren()) do 
                             if b:IsA("TextButton") then 
                                 b.TextColor3 = Theme.LightText
                             end 
                         end
-                        game:GetService("TweenService"):Create(Option, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+                        
+                        game:GetService("TweenService"):Create(Option, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                             TextColor3 = Theme.AccentColor
                         }):Play()
-                        DropList:TweenSize(UDim2.new(0, 408, 0, 35), "InOut", "Linear", 0.1)
-                        game:GetService("TweenService"):Create(DropdownIcon, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                            ImageColor3 = Theme.LightText
-                        }):Play()
-                        wait(0.1)
-                        DropList.Visible = false
-                        opened = false
-                        DropElements(true)
-                        Size()
+                        
+                        -- Close dropdown after selection
+                        ToggleDropdown()
                     end)
     
                     Option.MouseEnter:Connect(function()
-                        game:GetService("TweenService"):Create(Option, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                            BackgroundColor3 = Color3.fromRGB(45, 45, 55)
+                        game:GetService("TweenService"):Create(Option, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                            BackgroundColor3 = Color3.fromRGB(40, 40, 48)
                         }):Play()
                     end)
+                    
                     Option.MouseLeave:Connect(function()
-                        game:GetService("TweenService"):Create(Option, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+                        game:GetService("TweenService"):Create(Option, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                             BackgroundColor3 = Theme.ContrastBackground
                         }):Play()
                     end)
                 end
+                
+                -- Update dropdown layout if it's open
+                if opened then
+                    local contentSize = UpdateDropListSize()
+                    DropList.Size = UDim2.new(1, 0, 0, contentSize)
+                end
             end
+            
             return DropdownFunction
         end
         return Elements
