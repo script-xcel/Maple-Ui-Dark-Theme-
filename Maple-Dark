@@ -318,7 +318,7 @@ function Library:Create(xHubName,xGameName)
 
             function LabelFunction:UpdateLabel(Name)
                 Label.Text = Name
-                LabelHolder.Name = tostring(Name).."_Label"
+                LabelFrame.Name = tostring(Name).."_Label"
             end
             return LabelFunction
         end
@@ -383,7 +383,7 @@ function Library:Create(xHubName,xGameName)
 
             function ButtonFunction:UpdateButton(Name)
                 Button.Text = Name
-                ButtonHolder.Name = tostring(Name).."_Button"
+                ButtonFrame.Name = tostring(Name).."_Button"
             end
             return ButtonFunction
         end
