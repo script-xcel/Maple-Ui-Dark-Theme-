@@ -78,11 +78,10 @@ function Library:Create(xHubName,xGameName)
     DropdownContainer.ZIndex = 9999
     DropdownContainer.Visible = false
 
-    -- Create the ActiveDropList here so it's available globally to all dropdowns
     local ActiveDropList = Instance.new("ScrollingFrame")
     ActiveDropList.Name = "ActiveDropList"
     ActiveDropList.Parent = DropdownContainer
-    ActiveDropList.BackgroundColor3 = Color3.fromRGB(18, 18, 25) -- Darker to match theme
+    ActiveDropList.BackgroundColor3 = Color3.fromRGB(22, 22, 31)
     ActiveDropList.BorderSizePixel = 0
     ActiveDropList.Size = UDim2.new(0, 408, 0, 0)
     ActiveDropList.ZIndex = 10000
@@ -115,26 +114,25 @@ function Library:Create(xHubName,xGameName)
 
     Main.Name = "Main"
     Main.Parent = ScreenGui
-    Main.BackgroundColor3 = Color3.fromRGB(18, 18, 25) -- Darker theme
+    Main.BackgroundColor3 = Color3.fromRGB(22, 22, 31)
     Main.Position = UDim2.new(0.278277636, 0, 0.281287253, 0)
     Main.Size = UDim2.new(0, 580, 0, 370)
 
-    MainCorner.CornerRadius = UDim.new(0, 8) -- Improved corner
+    MainCorner.CornerRadius = UDim.new(0, 12)
     MainCorner.Name = "MainCorner"
     MainCorner.Parent = Main
 
     Sidebar.Name = "Sidebar"
     Sidebar.Parent = Main
-    Sidebar.BackgroundColor3 = Color3.fromRGB(22, 22, 30) -- Darker theme
+    Sidebar.BackgroundColor3 = Color3.fromRGB(28, 29, 43)
     Sidebar.Size = UDim2.new(0, 140, 0, 370)
 
     SidebarCorner.Name = "SidebarCorner"
-    SidebarCorner.CornerRadius = UDim.new(0, 8) -- Improved corner
     SidebarCorner.Parent = Sidebar
 
     Filler.Name = "Filler"
     Filler.Parent = Sidebar
-    Filler.BackgroundColor3 = Color3.fromRGB(22, 22, 30) -- Darker theme
+    Filler.BackgroundColor3 = Color3.fromRGB(28, 29, 43)
     Filler.BorderSizePixel = 0
     Filler.Position = UDim2.new(0.930769145, 0, 0, 0)
     Filler.Size = UDim2.new(0, 9, 0, 370)
@@ -153,7 +151,7 @@ function Library:Create(xHubName,xGameName)
 
     Line.Name = "Line"
     Line.Parent = Sidebar
-    Line.BackgroundColor3 = Color3.fromRGB(45, 45, 60) -- Darker theme
+    Line.BackgroundColor3 = Color3.fromRGB(55, 55, 75)
     Line.BorderSizePixel = 0
     Line.Position = UDim2.new(0.0642857179, 0, 0.148648649, 0)
     Line.Size = UDim2.new(0, 121, 0, 2)
@@ -174,7 +172,7 @@ function Library:Create(xHubName,xGameName)
 
     SideLine.Name = "SideLine"
     SideLine.Parent = Sidebar
-    SideLine.BackgroundColor3 = Color3.fromRGB(15, 15, 20) -- Darker theme
+    SideLine.BackgroundColor3 = Color3.fromRGB(18, 18, 25)
     SideLine.BorderSizePixel = 0
     SideLine.Position = UDim2.new(1, 0, 0, 0)
     SideLine.Size = UDim2.new(0, 2, 0, 370)
@@ -222,7 +220,7 @@ function Library:Create(xHubName,xGameName)
         Tab.Parent = Tabs
         Tab.Active = true
         Tab.Visible = xVisible
-        Tab.BackgroundColor3 = Color3.fromRGB(18, 18, 25) -- Darker theme
+        Tab.BackgroundColor3 = Color3.fromRGB(22, 22, 31)
         Tab.BorderSizePixel = 0
         Tab.Size = UDim2.new(0, 438, 0, 352)
         Tab.ScrollBarThickness = 5
@@ -252,7 +250,7 @@ function Library:Create(xHubName,xGameName)
             TabButton.BackgroundColor3 = Color3.fromRGB(55, 74, 251)
             TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
         else 
-            TabButton.BackgroundColor3 = Color3.fromRGB(22, 22, 30) -- Darker theme
+            TabButton.BackgroundColor3 = Color3.fromRGB(28, 29, 43)
             TabButton.TextColor3 = Color3.fromRGB(190, 190, 190)
         end
 
@@ -260,7 +258,7 @@ function Library:Create(xHubName,xGameName)
             Size()
             for i,v in pairs(ActualSide:GetChildren()) do 
                 if v:IsA("TextButton") then 
-                    v.BackgroundColor3 = Color3.fromRGB(22, 22, 30) -- Darker theme
+                    v.BackgroundColor3 = Color3.fromRGB(28, 29, 43)
                     v.TextColor3 = Color3.fromRGB(190, 190, 190)
                 end
             end
@@ -320,7 +318,7 @@ function Library:Create(xHubName,xGameName)
 
             function LabelFunction:UpdateLabel(Name)
                 Label.Text = Name
-                LabelFrame.Name = tostring(Name).."_Label"
+                LabelHolder.Name = tostring(Name).."_Label"
             end
             return LabelFunction
         end
@@ -337,7 +335,7 @@ function Library:Create(xHubName,xGameName)
 
             ButtonFrame.Name = tostring(Name).."_Button"
             ButtonFrame.Parent = Tab
-            ButtonFrame.BackgroundColor3 = Color3.fromRGB(22, 22, 30) -- Darker theme
+            ButtonFrame.BackgroundColor3 = Color3.fromRGB(28, 29, 43)
             ButtonFrame.Size = UDim2.new(0, 408, 0, 35)
             
             ButtonFrameCorner.Name = "ButtonFrameCorner"
@@ -345,7 +343,7 @@ function Library:Create(xHubName,xGameName)
             
             Button.Name = "Button"
             Button.Parent = ButtonFrame
-            Button.BackgroundColor3 = Color3.fromRGB(22, 22, 30) -- Darker theme
+            Button.BackgroundColor3 = Color3.fromRGB(28, 29, 43)
             Button.Size = UDim2.new(0, 408, 0, 35)
             Button.Font = Enum.Font.Gotham
             Button.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -367,25 +365,25 @@ function Library:Create(xHubName,xGameName)
                 }):Play()
                 wait(0.1)
                 game:GetService("TweenService"):Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                    BackgroundColor3 = Color3.fromRGB(22, 22, 30) -- Darker theme
+                    BackgroundColor3 = Color3.fromRGB(28, 29, 43)
                 }):Play()
                 pcall(Callback)
             end)
 
             Button.MouseEnter:Connect(function()
                 game:GetService("TweenService"):Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                    BackgroundColor3 = Color3.fromRGB(30, 30, 40) -- Slightly lighter on hover
+                    BackgroundColor3 = Color3.fromRGB(35, 37, 52)
                 }):Play()
             end)
             Button.MouseLeave:Connect(function()
                 game:GetService("TweenService"):Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                    BackgroundColor3 = Color3.fromRGB(22, 22, 30) -- Darker theme
+                    BackgroundColor3 = Color3.fromRGB(28, 29, 43)
                 }):Play()
             end)
 
             function ButtonFunction:UpdateButton(Name)
                 Button.Text = Name
-                ButtonFrame.Name = tostring(Name).."_Button"
+                ButtonHolder.Name = tostring(Name).."_Button"
             end
             return ButtonFunction
         end
@@ -405,13 +403,13 @@ function Library:Create(xHubName,xGameName)
 
             ToggleFrame.Name = tostring(Name).."_Toggle"
             ToggleFrame.Parent = Tab
-            ToggleFrame.BackgroundColor3 = Color3.fromRGB(22, 22, 30) -- Darker theme
+            ToggleFrame.BackgroundColor3 = Color3.fromRGB(28, 29, 43)
             ToggleFrame.BorderSizePixel = 0
             ToggleFrame.Size = UDim2.new(0, 408, 0, 35)
 
             ToggleName.Name = "ToggleName"
             ToggleName.Parent = ToggleFrame
-            ToggleName.BackgroundColor3 = Color3.fromRGB(22, 22, 30) -- Darker theme
+            ToggleName.BackgroundColor3 = Color3.fromRGB(28, 29, 43)
             ToggleName.BackgroundTransparency = 1.000
             ToggleName.BorderSizePixel = 0
             ToggleName.Size = UDim2.new(0, 347, 0, 35)
@@ -430,7 +428,7 @@ function Library:Create(xHubName,xGameName)
 
             ToggleF.Name = "ToggleF"
             ToggleF.Parent = ToggleFrame
-            ToggleF.BackgroundColor3 = Color3.fromRGB(45, 45, 60) -- Darker theme
+            ToggleF.BackgroundColor3 = Color3.fromRGB(55, 55, 75)
             ToggleF.BackgroundTransparency = 0
             ToggleF.BorderSizePixel = 0
             ToggleF.Position = UDim2.new(0.867647052, 0, 0.142857149, 0)
@@ -442,7 +440,7 @@ function Library:Create(xHubName,xGameName)
 
             ToggleButton.Name = "ToggleButton"
             ToggleButton.Parent = ToggleF
-            ToggleButton.BackgroundColor3 = Color3.fromRGB(45, 45, 60) -- Darker theme
+            ToggleButton.BackgroundColor3 = Color3.fromRGB(55, 55, 75)
             ToggleButton.BackgroundTransparency = 1
             ToggleButton.BorderSizePixel = 0
             ToggleButton.Size = UDim2.new(0, 45, 0, 23)
@@ -468,7 +466,7 @@ function Library:Create(xHubName,xGameName)
                     game:GetService("TweenService"):Create(ToggleF, TweenInfo.new(0.3), {BackgroundColor3 = Color3.fromRGB(55, 74, 251)}):Play() 
                     game:GetService("TweenService"):Create(ToggleCircle, TweenInfo.new(0.3), {Position = UDim2.new(0.559, 0,0.153, 0)}):Play() 
                 else
-                    game:GetService("TweenService"):Create(ToggleF, TweenInfo.new(0.3), {BackgroundColor3 = Color3.fromRGB(45, 45, 60)}):Play() -- Darker theme
+                    game:GetService("TweenService"):Create(ToggleF, TweenInfo.new(0.3), {BackgroundColor3 = Color3.fromRGB(55, 55, 75)}):Play() 
                     game:GetService("TweenService"):Create(ToggleCircle, TweenInfo.new(0.3), {Position = UDim2.new(0.093, 0,0.153, 0)}):Play() 
                 end
                 pcall(Callback,ToggleEnabled)
@@ -493,7 +491,7 @@ function Library:Create(xHubName,xGameName)
 
             SliderFrame.Name = tostring(Name).."_Slider"
             SliderFrame.Parent = Tab
-            SliderFrame.BackgroundColor3 = Color3.fromRGB(22, 22, 30) -- Darker theme
+            SliderFrame.BackgroundColor3 = Color3.fromRGB(28, 29, 43)
             SliderFrame.Size = UDim2.new(0, 408, 0, 50)
 
             SliderFrameCorner.Name = "SliderFrameCorner"
@@ -501,7 +499,7 @@ function Library:Create(xHubName,xGameName)
 
             SliderButton.Name = "SliderButton"
             SliderButton.Parent = SliderFrame
-            SliderButton.BackgroundColor3 = Color3.fromRGB(35, 35, 45) -- Darker theme
+            SliderButton.BackgroundColor3 = Color3.fromRGB(55, 55, 75)
             SliderButton.BorderSizePixel = 0
             SliderButton.Position = UDim2.new(0.0242369417, 0, 0.639999986, 0)
             SliderButton.Size = UDim2.new(0, 389, 0, 10)
@@ -511,7 +509,6 @@ function Library:Create(xHubName,xGameName)
             SliderButton.TextSize = 14.000
 
             SliderButtonCorner.Name = "SliderButtonCorner"
-            SliderButtonCorner.CornerRadius = UDim.new(0, 4) -- Improved corner
             SliderButtonCorner.Parent = SliderButton
 
             SliderTrail.Name = "SliderTrail"
@@ -521,7 +518,6 @@ function Library:Create(xHubName,xGameName)
             SliderTrail.BorderSizePixel = 0
 
             SliderTrailCorner.Name = "SliderTrailCorner"
-            SliderTrailCorner.CornerRadius = UDim.new(0, 4) -- Improved corner
             SliderTrailCorner.Parent = SliderTrail
 
             SliderName.Name = "SliderName"
@@ -545,18 +541,28 @@ function Library:Create(xHubName,xGameName)
             SliderValue.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             SliderValue.BackgroundTransparency = 1.000
             SliderValue.BorderSizePixel = 0
-            SliderValue.TextTransparency = 0.500 -- Show value with transparency
+            SliderValue.TextTransparency = 1.000
             SliderValue.Position = UDim2.new(0.802061796, 0, 0, 0)
             SliderValue.Size = UDim2.new(0, 80, 0, 26)
             SliderValue.Font = Enum.Font.Gotham
-            SliderValue.Text = tostring(Min)
+            SliderValue.Text = "Value"
             SliderValue.TextColor3 = Color3.fromRGB(255, 255, 255)
             SliderValue.TextSize = 16.000
             SliderValue.TextXAlignment = Enum.TextXAlignment.Right
 
-local Library = {}
-local LibraryName = tostring(math.random(100000,200000))..tostring(math.random(100000,200000))..tostring(math.random(100000,200000))
+            SliderValuePadding.Name = "SliderValuePadding"
+            SliderValuePadding.Parent = SliderValue
+            SliderValuePadding.PaddingRight = UDim.new(0, 10)
 
+            local ms = game.Players.LocalPlayer:GetMouse()
+            local uis = game:GetService("UserInputService")
+            local Value
+            local mouse = game:GetService("Players").LocalPlayer:GetMouse();
+
+            SliderButton.MouseButton1Down:Connect(function()
+                game:GetService("TweenService"):Create(SliderValue, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+                    TextTransparency = 0
+                }):Play()
 function Library:Toggle()
     if game.CoreGui:FindFirstChild(LibraryName).Enabled then 
         game.CoreGui:FindFirstChild(LibraryName).Enabled = false
