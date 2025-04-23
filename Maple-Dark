@@ -69,6 +69,55 @@ function Library:Create(xHubName,xGameName)
     local TabHolder = Instance.new("Frame")
     local Tabs = Instance.new("Folder")
     
+    -- Player Profile
+    local ProfileContainer = Instance.new("Frame")
+    local ProfileContainerCorner = Instance.new("UICorner")
+    local ProfilePicture = Instance.new("ImageLabel")
+    local ProfilePictureCorner = Instance.new("UICorner")
+    local ProfileName = Instance.new("TextLabel")
+    
+    ProfileContainer.Name = "ProfileContainer"
+    ProfileContainer.Parent = Sidebar
+    ProfileContainer.BackgroundColor3 = Color3.fromRGB(20, 20, 28)
+    ProfileContainer.Position = UDim2.new(0.05, 0, 0.885, 0)
+    ProfileContainer.Size = UDim2.new(0, 125, 0, 35)
+    
+    ProfileContainerCorner.CornerRadius = UDim.new(0, 6)
+    ProfileContainerCorner.Name = "ProfileContainerCorner"
+    ProfileContainerCorner.Parent = ProfileContainer
+    
+    ProfilePicture.Name = "ProfilePicture"
+    ProfilePicture.Parent = ProfileContainer
+    ProfilePicture.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+    ProfilePicture.Position = UDim2.new(0.02, 0, 0.1, 0)
+    ProfilePicture.Size = UDim2.new(0, 28, 0, 28)
+    
+    -- Load player thumbnail
+    local Players = game:GetService("Players")
+    local player = Players.LocalPlayer
+    local userId = player.UserId
+    local thumbType = Enum.ThumbnailType.HeadShot
+    local thumbSize = Enum.ThumbnailSize.Size420x420
+    local content = Players:GetUserThumbnailAsync(userId, thumbType, thumbSize)
+    
+    ProfilePicture.Image = content
+    ProfilePictureCorner.CornerRadius = UDim.new(0, 6)
+    ProfilePictureCorner.Name = "ProfilePictureCorner"
+    ProfilePictureCorner.Parent = ProfilePicture
+    
+    ProfileName.Name = "ProfileName"
+    ProfileName.Parent = ProfileContainer
+    ProfileName.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    ProfileName.BackgroundTransparency = 1.000
+    ProfileName.BorderSizePixel = 0
+    ProfileName.Position = UDim2.new(0.28, 0, 0, 0)
+    ProfileName.Size = UDim2.new(0, 85, 0, 35)
+    ProfileName.Font = Enum.Font.Gotham
+    ProfileName.Text = player.DisplayName
+    ProfileName.TextColor3 = Color3.fromRGB(255, 255, 255)
+    ProfileName.TextSize = 12.000
+    ProfileName.TextXAlignment = Enum.TextXAlignment.Left
+    
     local DropdownContainer = Instance.new("Frame")
     DropdownContainer.Name = "DropdownContainer"
     DropdownContainer.Parent = ScreenGui
@@ -209,6 +258,7 @@ function Library:Create(xHubName,xGameName)
         local Tab = Instance.new("ScrollingFrame")
         local TabListLayout = Instance.new("UIListLayout")
         local TabButton = Instance.new("TextButton")
+        local TabButtonCorner = Instance.new("UICorner")
         
         ScrollSize()
 
@@ -241,6 +291,10 @@ function Library:Create(xHubName,xGameName)
         TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
         TabButton.TextSize = 14.000
         TabButton.ZIndex = 2
+        
+        TabButtonCorner.Name = "TabButtonCorner"
+        TabButtonCorner.CornerRadius = UDim.new(0, 6)
+        TabButtonCorner.Parent = TabButton
 
         Size()
         Tab.ChildAdded:Connect(Size)
