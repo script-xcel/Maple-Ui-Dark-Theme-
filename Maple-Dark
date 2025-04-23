@@ -79,15 +79,18 @@ function Library:Create(xHubName,xGameName)
     DropdownContainer.Visible = false
 
     -- Create the ActiveDropList here so it's available globally to all dropdowns
-    local ActiveDropList = Instance.new("Frame")
+    local ActiveDropList = Instance.new("ScrollingFrame")
     ActiveDropList.Name = "ActiveDropList"
     ActiveDropList.Parent = DropdownContainer
-    ActiveDropList.BackgroundColor3 = Color3.fromRGB(35, 37, 52)
+    ActiveDropList.BackgroundColor3 = Color3.fromRGB(22, 22, 31) -- Darker to match theme
     ActiveDropList.BorderSizePixel = 0
     ActiveDropList.Size = UDim2.new(0, 408, 0, 0)
     ActiveDropList.ZIndex = 10000
     ActiveDropList.Visible = false
     ActiveDropList.ClipsDescendants = true
+    ActiveDropList.ScrollBarThickness = 4
+    ActiveDropList.ScrollingEnabled = true
+    ActiveDropList.CanvasSize = UDim2.new(0, 0, 0, 0)
 
     local DropListCorner = Instance.new("UICorner")
     DropListCorner.CornerRadius = UDim.new(0, 6)
@@ -100,63 +103,6 @@ function Library:Create(xHubName,xGameName)
     DropListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
     DropListLayout.SortOrder = Enum.SortOrder.LayoutOrder
     DropListLayout.Padding = UDim.new(0, 3)
-    
-    local PlayerProfile = Instance.new("Frame")
-    PlayerProfile.Name = "PlayerProfile"
-    PlayerProfile.Parent = ScreenGui
-    PlayerProfile.BackgroundColor3 = Color3.fromRGB(28, 29, 43)
-    PlayerProfile.Position = UDim2.new(0.01, 0, 0.92, 0)
-    PlayerProfile.Size = UDim2.new(0, 200, 0, 60)
-    PlayerProfile.BorderSizePixel = 0
-    
-    local ProfileCorner = Instance.new("UICorner")
-    ProfileCorner.CornerRadius = UDim.new(0, 8)
-    ProfileCorner.Parent = PlayerProfile
-    
-    local PlayerImage = Instance.new("ImageLabel")
-    PlayerImage.Name = "PlayerImage"
-    PlayerImage.Parent = PlayerProfile
-    PlayerImage.BackgroundColor3 = Color3.fromRGB(35, 37, 52)
-    PlayerImage.BackgroundTransparency = 1
-    PlayerImage.Position = UDim2.new(0.03, 0, 0.15, 0)
-    PlayerImage.Size = UDim2.new(0, 42, 0, 42)
-    PlayerImage.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
-    
-    local PlayerImageCorner = Instance.new("UICorner")
-    PlayerImageCorner.CornerRadius = UDim.new(1, 0)
-    PlayerImageCorner.Parent = PlayerImage
-    
-    local PlayerName = Instance.new("TextLabel")
-    PlayerName.Name = "PlayerName"
-    PlayerName.Parent = PlayerProfile
-    PlayerName.BackgroundTransparency = 1
-    PlayerName.Position = UDim2.new(0.28, 0, 0.15, 0)
-    PlayerName.Size = UDim2.new(0, 135, 0, 20)
-    PlayerName.Font = Enum.Font.GothamBold
-    PlayerName.TextColor3 = Color3.fromRGB(255, 255, 255)
-    PlayerName.TextSize = 14
-    PlayerName.TextXAlignment = Enum.TextXAlignment.Left
-    
-    local PlayerDisplayName = Instance.new("TextLabel")
-    PlayerDisplayName.Name = "PlayerDisplayName"
-    PlayerDisplayName.Parent = PlayerProfile
-    PlayerDisplayName.BackgroundTransparency = 1
-    PlayerDisplayName.Position = UDim2.new(0.28, 0, 0.55, 0)
-    PlayerDisplayName.Size = UDim2.new(0, 135, 0, 16)
-    PlayerDisplayName.Font = Enum.Font.Gotham
-    PlayerDisplayName.TextColor3 = Color3.fromRGB(180, 180, 180)
-    PlayerDisplayName.TextSize = 12
-    PlayerDisplayName.TextXAlignment = Enum.TextXAlignment.Left
-    
-    local player = game.Players.LocalPlayer
-    PlayerName.Text = player.Name
-    PlayerDisplayName.Text = player.DisplayName
-    
-    local userId = player.UserId
-    local thumbType = Enum.ThumbnailType.HeadShot
-    local thumbSize = Enum.ThumbnailSize.Size420x420
-    local content = game:GetService("Players"):GetUserThumbnailAsync(userId, thumbType, thumbSize)
-    PlayerImage.Image = content
 
     function ScrollSize()
         ActualSide.CanvasSize = UDim2.new(0, 0, 0, ActualSideListLayout.AbsoluteContentSize.Y)
@@ -458,13 +404,13 @@ function Library:Create(xHubName,xGameName)
 
             ToggleFrame.Name = tostring(Name).."_Toggle"
             ToggleFrame.Parent = Tab
-            ToggleFrame.BackgroundColor3 = Color3.fromRGB(40, 42, 60)
+            ToggleFrame.BackgroundColor3 = Color3.fromRGB(28, 29, 43)
             ToggleFrame.BorderSizePixel = 0
             ToggleFrame.Size = UDim2.new(0, 408, 0, 35)
 
             ToggleName.Name = "ToggleName"
             ToggleName.Parent = ToggleFrame
-            ToggleName.BackgroundColor3 = Color3.fromRGB(40, 42, 60)
+            ToggleName.BackgroundColor3 = Color3.fromRGB(28, 29, 43)
             ToggleName.BackgroundTransparency = 1.000
             ToggleName.BorderSizePixel = 0
             ToggleName.Size = UDim2.new(0, 347, 0, 35)
@@ -546,7 +492,7 @@ function Library:Create(xHubName,xGameName)
 
             SliderFrame.Name = tostring(Name).."_Slider"
             SliderFrame.Parent = Tab
-            SliderFrame.BackgroundColor3 = Color3.fromRGB(40, 42, 60)
+            SliderFrame.BackgroundColor3 = Color3.fromRGB(28, 29, 43)
             SliderFrame.Size = UDim2.new(0, 408, 0, 50)
 
             SliderFrameCorner.Name = "SliderFrameCorner"
