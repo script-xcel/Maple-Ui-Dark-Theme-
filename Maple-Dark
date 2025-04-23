@@ -853,13 +853,22 @@ function Library:Create(xHubName,xGameName)
             DropdownButton.ZIndex = 3
 
             local function closeActiveDropdown()
-                if activeDropdown then
+                if activeDropdown and activeDropdown.DropdownIcon then
+                    -- Animate the dropdown icon back to normal
                     game:GetService("TweenService"):Create(activeDropdown.DropdownIcon, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
                         ImageColor3 = Color3.fromRGB(255, 255, 255),
                         Rotation = 0
                     }):Play()
-                    DropdownContainer.Visible = false
-                    ActiveDropList.Visible = false
+                    
+                    -- Hide the dropdown container and list
+                    if DropdownContainer then
+                        DropdownContainer.Visible = false
+                    end
+                    
+                    if ActiveDropList then
+                        ActiveDropList.Visible = false
+                    end
+                    
                     opened = false
                     activeDropdown = nil
                 end
@@ -873,7 +882,15 @@ function Library:Create(xHubName,xGameName)
                     
                     -- Position dropdown list right below the button
                     ActiveDropList.Position = UDim2.new(0, frameAbsPos.X, 0, frameAbsPos.Y + frameAbsSize.Y + 5)
-                    ActiveDropList.Size = UDim2.new(0, frameAbsSize.X, 0, DropListLayout.AbsoluteContentSize.Y + 6)
+                    
+                    -- Get the DropListLayout from ActiveDropList
+                    local dropListLayout = ActiveDropList:FindFirstChild("DropListLayout")
+                    if dropListLayout then
+                        ActiveDropList.Size = UDim2.new(0, frameAbsSize.X, 0, dropListLayout.AbsoluteContentSize.Y + 6)
+                    else
+                        -- Fallback size if layout not found
+                        ActiveDropList.Size = UDim2.new(0, frameAbsSize.X, 0, 0)
+                    end
                     
                     -- Make the dropdown container and list visible
                     DropdownContainer.Visible = true
@@ -978,20 +995,23 @@ function Library:Create(xHubName,xGameName)
             -- Close dropdown when clicking elsewhere
             game:GetService("UserInputService").InputBegan:Connect(function(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                    local mousePos = game:GetService("UserInputService"):GetMouseLocation()
-                    
                     if opened and activeDropdown == DropdownFrame then
-                        local framePos = DropdownFrame.AbsolutePosition
-                        local frameSize = DropdownFrame.AbsoluteSize
-                        local dropListPos = ActiveDropList.AbsolutePosition
-                        local dropListSize = ActiveDropList.AbsoluteSize
+                        local mousePos = game:GetService("UserInputService"):GetMouseLocation()
                         
-                        -- Check if click is outside both the dropdown button and list
-                        if not (mousePos.X >= framePos.X and mousePos.X <= framePos.X + frameSize.X and 
-                                mousePos.Y >= framePos.Y and mousePos.Y <= framePos.Y + frameSize.Y) and
-                           not (mousePos.X >= dropListPos.X and mousePos.X <= dropListPos.X + dropListSize.X and
-                                mousePos.Y >= dropListPos.Y and mousePos.Y <= dropListPos.Y + dropListSize.Y) then
-                            closeActiveDropdown()
+                        -- Check if ActiveDropList exists
+                        if ActiveDropList and ActiveDropList.Visible then
+                            local framePos = DropdownFrame.AbsolutePosition
+                            local frameSize = DropdownFrame.AbsoluteSize
+                            local dropListPos = ActiveDropList.AbsolutePosition
+                            local dropListSize = ActiveDropList.AbsoluteSize
+                            
+                            -- Check if click is outside both the dropdown button and list
+                            if not (mousePos.X >= framePos.X and mousePos.X <= framePos.X + frameSize.X and 
+                                    mousePos.Y >= framePos.Y and mousePos.Y <= framePos.Y + frameSize.Y) and
+                               not (mousePos.X >= dropListPos.X and mousePos.X <= dropListPos.X + dropListSize.X and
+                                    mousePos.Y >= dropListPos.Y and mousePos.Y <= dropListPos.Y + dropListSize.Y) then
+                                closeActiveDropdown()
+                            end
                         end
                     end
                 end
