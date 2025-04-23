@@ -69,6 +69,16 @@ function Library:Create(xHubName,xGameName)
     local GameName = Instance.new("TextLabel")
     local TabHolder = Instance.new("Frame")
     local Tabs = Instance.new("Folder")
+    
+    -- Dropdown container at root level
+    local DropdownContainer = Instance.new("Frame")
+    DropdownContainer.Name = "DropdownContainer"
+    DropdownContainer.Parent = ScreenGui
+    DropdownContainer.BackgroundTransparency = 1
+    DropdownContainer.BorderSizePixel = 0
+    DropdownContainer.Size = UDim2.new(1, 0, 1, 0)
+    DropdownContainer.ZIndex = 9999
+    DropdownContainer.Visible = false
 
     function ScrollSize()
         ActualSide.CanvasSize = UDim2.new(0, 0, 0, ActualSideListLayout.AbsoluteContentSize.Y)
@@ -77,10 +87,11 @@ function Library:Create(xHubName,xGameName)
     ScreenGui.Parent = game.CoreGui
     ScreenGui.ResetOnSpawn = false 
     ScreenGui.Name = LibraryName
+    ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
     Main.Name = "Main"
     Main.Parent = ScreenGui
-    Main.BackgroundColor3 = Color3.fromRGB(31, 30, 46)
+    Main.BackgroundColor3 = Color3.fromRGB(22, 22, 31) -- Darker background
     Main.Position = UDim2.new(0.278277636, 0, 0.281287253, 0)
     Main.Size = UDim2.new(0, 580, 0, 370)
 
@@ -90,7 +101,7 @@ function Library:Create(xHubName,xGameName)
 
     Sidebar.Name = "Sidebar"
     Sidebar.Parent = Main
-    Sidebar.BackgroundColor3 = Color3.fromRGB(40, 42, 60)
+    Sidebar.BackgroundColor3 = Color3.fromRGB(28, 29, 43) -- Darker sidebar
     Sidebar.Size = UDim2.new(0, 140, 0, 370)
 
     SidebarCorner.Name = "SidebarCorner"
@@ -98,7 +109,7 @@ function Library:Create(xHubName,xGameName)
 
     Filler.Name = "Filler"
     Filler.Parent = Sidebar
-    Filler.BackgroundColor3 = Color3.fromRGB(40, 42, 60)
+    Filler.BackgroundColor3 = Color3.fromRGB(28, 29, 43) -- Match sidebar
     Filler.BorderSizePixel = 0
     Filler.Position = UDim2.new(0.930769145, 0, 0, 0)
     Filler.Size = UDim2.new(0, 9, 0, 370)
@@ -117,7 +128,7 @@ function Library:Create(xHubName,xGameName)
 
     Line.Name = "Line"
     Line.Parent = Sidebar
-    Line.BackgroundColor3 = Color3.fromRGB(75, 75, 75)
+    Line.BackgroundColor3 = Color3.fromRGB(55, 55, 75)
     Line.BorderSizePixel = 0
     Line.Position = UDim2.new(0.0642857179, 0, 0.148648649, 0)
     Line.Size = UDim2.new(0, 121, 0, 2)
@@ -138,7 +149,7 @@ function Library:Create(xHubName,xGameName)
 
     SideLine.Name = "SideLine"
     SideLine.Parent = Sidebar
-    SideLine.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    SideLine.BackgroundColor3 = Color3.fromRGB(18, 18, 25) -- Darker line
     SideLine.BorderSizePixel = 0
     SideLine.Position = UDim2.new(1, 0, 0, 0)
     SideLine.Size = UDim2.new(0, 2, 0, 370)
@@ -186,7 +197,7 @@ function Library:Create(xHubName,xGameName)
         Tab.Parent = Tabs
         Tab.Active = true
         Tab.Visible = xVisible
-        Tab.BackgroundColor3 = Color3.fromRGB(31, 30, 46)
+        Tab.BackgroundColor3 = Color3.fromRGB(22, 22, 31) -- Darker tab
         Tab.BorderSizePixel = 0
         Tab.Size = UDim2.new(0, 438, 0, 352)
         Tab.ScrollBarThickness = 5
@@ -216,7 +227,7 @@ function Library:Create(xHubName,xGameName)
             TabButton.BackgroundColor3 = Color3.fromRGB(55, 74, 251)
             TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
         else 
-            TabButton.BackgroundColor3 = Color3.fromRGB(40, 42, 60)
+            TabButton.BackgroundColor3 = Color3.fromRGB(28, 29, 43) -- Match sidebar
             TabButton.TextColor3 = Color3.fromRGB(190, 190, 190)
         end
 
@@ -224,7 +235,7 @@ function Library:Create(xHubName,xGameName)
             Size()
             for i,v in pairs(ActualSide:GetChildren()) do 
                 if v:IsA("TextButton") then 
-                    v.BackgroundColor3 = Color3.fromRGB(40, 42, 60)
+                    v.BackgroundColor3 = Color3.fromRGB(28, 29, 43) -- Match sidebar
                     v.TextColor3 = Color3.fromRGB(190, 190, 190)
                 end
             end
@@ -301,7 +312,7 @@ function Library:Create(xHubName,xGameName)
 
             ButtonFrame.Name = tostring(Name).."_Button"
             ButtonFrame.Parent = Tab
-            ButtonFrame.BackgroundColor3 = Color3.fromRGB(40, 42, 60)
+            ButtonFrame.BackgroundColor3 = Color3.fromRGB(28, 29, 43) -- Darker button frame
             ButtonFrame.Size = UDim2.new(0, 408, 0, 35)
             
             ButtonFrameCorner.Name = "ButtonFrameCorner"
@@ -309,7 +320,7 @@ function Library:Create(xHubName,xGameName)
             
             Button.Name = "Button"
             Button.Parent = ButtonFrame
-            Button.BackgroundColor3 = Color3.fromRGB(40, 42, 60)
+            Button.BackgroundColor3 = Color3.fromRGB(28, 29, 43) -- Darker button
             Button.Size = UDim2.new(0, 408, 0, 35)
             Button.Font = Enum.Font.Gotham
             Button.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -331,19 +342,19 @@ function Library:Create(xHubName,xGameName)
                 }):Play()
                 wait(0.1)
                 game:GetService("TweenService"):Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                    BackgroundColor3 = Color3.fromRGB(40, 42, 60)
+                    BackgroundColor3 = Color3.fromRGB(28, 29, 43) -- Restore darker color
                 }):Play()
                 pcall(Callback)
             end)
 
             Button.MouseEnter:Connect(function()
                 game:GetService("TweenService"):Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                    BackgroundColor3 = Color3.fromRGB(48, 51, 70)
+                    BackgroundColor3 = Color3.fromRGB(35, 37, 52) -- Slightly lighter on hover
                 }):Play()
             end)
             Button.MouseLeave:Connect(function()
                 game:GetService("TweenService"):Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                    BackgroundColor3 = Color3.fromRGB(40, 42, 60)
+                    BackgroundColor3 = Color3.fromRGB(28, 29, 43) -- Restore darker color
                 }):Play()
             end)
 
@@ -705,6 +716,7 @@ function Library:Create(xHubName,xGameName)
             local Callback = Callback or function() end
             local DropSize = 35
             local opened = false 
+            local activeDropdown = nil
 
             local DropdownFrame = Instance.new("Frame")
             local DropdownFrameCorner = Instance.new("UICorner")
@@ -712,12 +724,33 @@ function Library:Create(xHubName,xGameName)
             local DropdownNamePadding = Instance.new("UIPadding")
             local DropdownIcon = Instance.new("ImageButton")
             local DropdownButton = Instance.new("TextButton")
-            local DropList = Instance.new("Frame")
+
+            -- Fixed dropdown list at root level - will be shown on top of everything
+            local ActiveDropList = Instance.new("Frame")
+            ActiveDropList.Name = "ActiveDropList"
+            ActiveDropList.Parent = DropdownContainer
+            ActiveDropList.BackgroundColor3 = Color3.fromRGB(35, 37, 52) -- Slightly lighter for dropdown
+            ActiveDropList.BorderSizePixel = 0
+            ActiveDropList.Size = UDim2.new(0, 408, 0, 0)
+            ActiveDropList.ZIndex = 10000
+            ActiveDropList.Visible = false
+            ActiveDropList.ClipsDescendants = true
+
+            local DropListCorner = Instance.new("UICorner")
+            DropListCorner.CornerRadius = UDim.new(0, 6)
+            DropListCorner.Name = "DropListCorner"
+            DropListCorner.Parent = ActiveDropList
+
             local DropListLayout = Instance.new("UIListLayout")
+            DropListLayout.Name = "DropListLayout"
+            DropListLayout.Parent = ActiveDropList
+            DropListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+            DropListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+            DropListLayout.Padding = UDim.new(0, 3)
 
             DropdownFrame.Name = tostring(Name).."_Dropdown"
             DropdownFrame.Parent = Tab
-            DropdownFrame.BackgroundColor3 = Color3.fromRGB(40, 42, 60)
+            DropdownFrame.BackgroundColor3 = Color3.fromRGB(28, 29, 43) -- Darker dropdown
             DropdownFrame.BorderSizePixel = 0
             DropdownFrame.Size = UDim2.new(0, 408, 0, 35)
             DropdownFrame.ZIndex = 1
@@ -764,158 +797,61 @@ function Library:Create(xHubName,xGameName)
             DropdownButton.TextSize = 14.000
             DropdownButton.ZIndex = 3
 
-            -- Create a new container for the dropdown list that will be fixed positioned above other elements
-            local DropdownContainer = Instance.new("Frame")
-            DropdownContainer.Name = "DropdownContainer"
-            DropdownContainer.Parent = DropdownFrame
-            DropdownContainer.BackgroundTransparency = 1
-            DropdownContainer.BorderSizePixel = 0
-            DropdownContainer.Position = UDim2.new(0, 0, 1, 0)
-            DropdownContainer.Size = UDim2.new(1, 0, 0, 0)
-            DropdownContainer.ZIndex = 100
-            DropdownContainer.Visible = true
-            DropdownContainer.ClipsDescendants = true
-
-            DropList.Name = "DropList"
-            DropList.Parent = DropdownContainer
-            DropList.BackgroundColor3 = Color3.fromRGB(40, 42, 60)
-            DropList.BackgroundTransparency = 0
-            DropList.BorderSizePixel = 0
-            DropList.Size = UDim2.new(1, 0, 1, 0)
-            DropList.ZIndex = 101
-            DropList.Position = UDim2.new(0, 0, 0, 0)
-
-            local DropListCorner = Instance.new("UICorner")
-            DropListCorner.CornerRadius = UDim.new(0, 6)
-            DropListCorner.Name = "DropListCorner"
-            DropListCorner.Parent = DropList
-
-            DropListLayout.Name = "DropListLayout"
-            DropListLayout.Parent = DropList
-            DropListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-            DropListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-            DropListLayout.Padding = UDim.new(0, 3)
-            
-            -- Function to update dropdown container size based on list content
-            local function UpdateDropdownSize()
-                if opened then
-                    local contentSize = DropListLayout.AbsoluteContentSize.Y
-                    DropdownContainer.Size = UDim2.new(1, 0, 0, contentSize + 6) -- Add padding
-                else
-                    DropdownContainer.Size = UDim2.new(1, 0, 0, 0)
-                end
-            end
-
-            DropListLayout.Changed:Connect(UpdateDropdownSize)
-
-            DropdownButton.MouseEnter:Connect(function()
-                game:GetService("TweenService"):Create(DropdownFrame, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                    BackgroundColor3 = Color3.fromRGB(48, 51, 70)
-                }):Play()
-            end)
-            
-            DropdownButton.MouseLeave:Connect(function()
-                game:GetService("TweenService"):Create(DropdownFrame, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                    BackgroundColor3 = Color3.fromRGB(40, 42, 60)
-                }):Play()
-            end)
-
-            DropdownButton.MouseButton1Down:Connect(function()
-                opened = not opened
-                
-                if opened then
-                    UpdateDropdownSize()
-                    game:GetService("TweenService"):Create(DropdownIcon, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                        ImageColor3 = Color3.fromRGB(55, 74, 251),
-                        Rotation = 180
-                    }):Play()
-                else
-                    game:GetService("TweenService"):Create(DropdownIcon, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+            local function closeActiveDropdown()
+                if activeDropdown then
+                    game:GetService("TweenService"):Create(activeDropdown.DropdownIcon, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
                         ImageColor3 = Color3.fromRGB(255, 255, 255),
                         Rotation = 0
                     }):Play()
-                    game:GetService("TweenService"):Create(DropdownContainer, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                        Size = UDim2.new(1, 0, 0, 0)
-                    }):Play()
-                end
-            end)  
-
-            for i,v in pairs(Listx) do 
-                local Option = Instance.new("TextButton")
-                local OptionCorner = Instance.new("UICorner")
-                
-                Option.Name = tostring(v).."_Option"
-                Option.Parent = DropList
-                Option.BackgroundColor3 = Color3.fromRGB(40, 42, 60)
-                Option.Size = UDim2.new(0, 400, 0, 30)
-                Option.Font = Enum.Font.Gotham
-                Option.Text = v
-                Option.TextColor3 = Color3.fromRGB(255, 255, 255)
-                Option.TextSize = 14.000
-                Option.ZIndex = 102
-
-                OptionCorner.Name = "OptionCorner"
-                OptionCorner.Parent = Option
-
-                Option.MouseButton1Down:Connect(function()
-                    Callback(v)
-                    DropdownName.Text = Name .. " - " .. v
-                    
-                    for a,b in pairs(DropList:GetChildren()) do 
-                        if b:IsA("TextButton") then 
-                            b.TextColor3 = Color3.fromRGB(255, 255, 255)
-                        end 
-                    end
-                    
-                    game:GetService("TweenService"):Create(Option, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                        TextColor3 = Color3.fromRGB(55, 74, 251)
-                    }):Play()
-                    
+                    DropdownContainer.Visible = false
+                    ActiveDropList.Visible = false
                     opened = false
-                    game:GetService("TweenService"):Create(DropdownIcon, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                        ImageColor3 = Color3.fromRGB(255, 255, 255),
-                        Rotation = 0
-                    }):Play()
-                    game:GetService("TweenService"):Create(DropdownContainer, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                        Size = UDim2.new(1, 0, 0, 0)
-                    }):Play()
-                end)
-
-                Option.MouseEnter:Connect(function()
-                    game:GetService("TweenService"):Create(Option, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                        BackgroundColor3 = Color3.fromRGB(48, 51, 70)
-                    }):Play()
-                end)
-                
-                Option.MouseLeave:Connect(function()
-                    game:GetService("TweenService"):Create(Option, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                        BackgroundColor3 = Color3.fromRGB(40, 42, 60)
-                    }):Play()
-                end)
+                    activeDropdown = nil
+                end
+            end
+            
+            local function updateDropdownPosition()
+                if opened and activeDropdown == DropdownFrame then
+                    -- Get absolute world position
+                    local frameAbsPos = DropdownFrame.AbsolutePosition
+                    local frameAbsSize = DropdownFrame.AbsoluteSize
+                    
+                    -- Position dropdown list right below the button
+                    ActiveDropList.Position = UDim2.new(0, frameAbsPos.X, 0, frameAbsPos.Y + frameAbsSize.Y + 5)
+                    ActiveDropList.Size = UDim2.new(0, frameAbsSize.X, 0, DropListLayout.AbsoluteContentSize.Y + 6)
+                    
+                    -- Make the dropdown container and list visible
+                    DropdownContainer.Visible = true
+                    ActiveDropList.Visible = true
+                end
             end
 
-            function DropdownFunction:UpdateDropdown(List)
-                -- Clear existing options
-                for _, child in pairs(DropList:GetChildren()) do
+            -- Clear existing options when opening this dropdown
+            local function clearDropdownOptions()
+                for _, child in pairs(ActiveDropList:GetChildren()) do
                     if child:IsA("TextButton") then
                         child:Destroy()
                     end
                 end
+            end
+
+            -- Add options for this dropdown
+            local function populateDropdownOptions()
+                clearDropdownOptions()
                 
-                -- Add new options
-                for i, v in pairs(List) do 
+                for i,v in pairs(Listx) do 
                     local Option = Instance.new("TextButton")
                     local OptionCorner = Instance.new("UICorner")
-
+                    
                     Option.Name = tostring(v).."_Option"
-                    Option.Parent = DropList
-                    Option.BackgroundColor3 = Color3.fromRGB(40, 42, 60)
+                    Option.Parent = ActiveDropList
+                    Option.BackgroundColor3 = Color3.fromRGB(28, 29, 43) -- Darker option
                     Option.Size = UDim2.new(0, 400, 0, 30)
                     Option.Font = Enum.Font.Gotham
                     Option.Text = v
                     Option.TextColor3 = Color3.fromRGB(255, 255, 255)
                     Option.TextSize = 14.000
-                    Option.ZIndex = 102
+                    Option.ZIndex = 10001
 
                     OptionCorner.Name = "OptionCorner"
                     OptionCorner.Parent = Option
@@ -924,7 +860,7 @@ function Library:Create(xHubName,xGameName)
                         Callback(v)
                         DropdownName.Text = Name .. " - " .. v
                         
-                        for a,b in pairs(DropList:GetChildren()) do 
+                        for a,b in pairs(ActiveDropList:GetChildren()) do 
                             if b:IsA("TextButton") then 
                                 b.TextColor3 = Color3.fromRGB(255, 255, 255)
                             end 
@@ -934,30 +870,86 @@ function Library:Create(xHubName,xGameName)
                             TextColor3 = Color3.fromRGB(55, 74, 251)
                         }):Play()
                         
-                        opened = false
-                        game:GetService("TweenService"):Create(DropdownIcon, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                            ImageColor3 = Color3.fromRGB(255, 255, 255),
-                            Rotation = 0
-                        }):Play()
-                        game:GetService("TweenService"):Create(DropdownContainer, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                            Size = UDim2.new(1, 0, 0, 0)
-                        }):Play()
+                        closeActiveDropdown()
                     end)
 
                     Option.MouseEnter:Connect(function()
                         game:GetService("TweenService"):Create(Option, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                            BackgroundColor3 = Color3.fromRGB(48, 51, 70)
+                            BackgroundColor3 = Color3.fromRGB(35, 37, 52) -- Slightly lighter on hover
                         }):Play()
                     end)
                     
                     Option.MouseLeave:Connect(function()
                         game:GetService("TweenService"):Create(Option, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
-                            BackgroundColor3 = Color3.fromRGB(40, 42, 60)
+                            BackgroundColor3 = Color3.fromRGB(28, 29, 43) -- Darker option
                         }):Play()
                     end)
                 end
+            }
+
+            DropdownButton.MouseEnter:Connect(function()
+                game:GetService("TweenService"):Create(DropdownFrame, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+                    BackgroundColor3 = Color3.fromRGB(35, 37, 52) -- Slightly lighter on hover
+                }):Play()
+            end)
+            
+            DropdownButton.MouseLeave:Connect(function()
+                game:GetService("TweenService"):Create(DropdownFrame, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+                    BackgroundColor3 = Color3.fromRGB(28, 29, 43) -- Darker dropdown
+                }):Play()
+            end)
+
+            DropdownButton.MouseButton1Down:Connect(function()
+                if activeDropdown == DropdownFrame then
+                    -- Close this dropdown
+                    closeActiveDropdown()
+                else
+                    -- Close any open dropdown first
+                    closeActiveDropdown()
+                    
+                    -- Open this dropdown
+                    opened = true
+                    activeDropdown = DropdownFrame
+                    populateDropdownOptions()
+                    updateDropdownPosition()
+                    
+                    game:GetService("TweenService"):Create(DropdownIcon, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+                        ImageColor3 = Color3.fromRGB(55, 74, 251),
+                        Rotation = 180
+                    }):Play()
+                end
+            end)
+            
+            -- Close dropdown when clicking elsewhere
+            game:GetService("UserInputService").InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                    local mousePos = game:GetService("UserInputService"):GetMouseLocation()
+                    
+                    if opened and activeDropdown == DropdownFrame then
+                        local framePos = DropdownFrame.AbsolutePosition
+                        local frameSize = DropdownFrame.AbsoluteSize
+                        local dropListPos = ActiveDropList.AbsolutePosition
+                        local dropListSize = ActiveDropList.AbsoluteSize
+                        
+                        -- Check if click is outside both the dropdown button and list
+                        if not (mousePos.X >= framePos.X and mousePos.X <= framePos.X + frameSize.X and 
+                                mousePos.Y >= framePos.Y and mousePos.Y <= framePos.Y + frameSize.Y) and
+                           not (mousePos.X >= dropListPos.X and mousePos.X <= dropListPos.X + dropListSize.X and
+                                mousePos.Y >= dropListPos.Y and mousePos.Y <= dropListPos.Y + dropListSize.Y) then
+                            closeActiveDropdown()
+                        end
+                    end
+                end
+            end)
+
+            function DropdownFunction:UpdateDropdown(List)
+                Listx = List or {}
                 
-                UpdateDropdownSize()
+                -- Update dropdown options if it's currently open
+                if opened and activeDropdown == DropdownFrame then
+                    populateDropdownOptions()
+                    updateDropdownPosition()
+                end
             end
             
             return DropdownFunction
