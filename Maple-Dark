@@ -1,8 +1,8 @@
 local Library = {}
--- Random UI Name
+
 local LibraryName = tostring(math.random(100000,200000))..tostring(math.random(100000,200000))..tostring(math.random(100000,200000))
 
--- Enhanced Theme colors with better dark theme
+
 local Theme = {
     Background = Color3.fromRGB(15, 15, 20), -- Darker main background
     SecondaryBackground = Color3.fromRGB(22, 22, 28), -- Sidebar background
@@ -16,7 +16,6 @@ local Theme = {
     Error = Color3.fromRGB(220, 75, 75) -- Red for error states
 }
 
--- Set font to a better, modern one
 local UIFont = Enum.Font.GothamSemibold
 
 -- Toggle UI visibility
@@ -28,7 +27,7 @@ function Library:Toggle()
     end
 end
 
--- Draggable functionality
+
 function Library:Drag(obj)
     local UserInputService = game:GetService("UserInputService")
     
@@ -227,7 +226,6 @@ function Library:Create(xHubName, xGameName)
         local TabListLayout = Instance.new("UIListLayout")
         local TabButton = Instance.new("TextButton")
         local TabButtonPadding = Instance.new("UIPadding")
-        local TabButtonIcon = Instance.new("ImageLabel")
         
         ScrollSize()
 
@@ -262,6 +260,7 @@ function Library:Create(xHubName, xGameName)
         TabButton.Text = "  " .. Name
         TabButton.TextColor3 = xVisible and Theme.LightText or Theme.DimText
         TabButton.TextSize = 14.000
+        TabButton.TextXAlignment = Enum.TextXAlignment.Center
         TabButton.ZIndex = 2
         
         local TabButtonCorner = Instance.new("UICorner")
@@ -270,18 +269,8 @@ function Library:Create(xHubName, xGameName)
         
         TabButtonPadding.Name = "TabButtonPadding"
         TabButtonPadding.Parent = TabButton
-        TabButtonPadding.PaddingLeft = UDim.new(0, 10)
-        
-        TabButtonIcon.Name = "TabButtonIcon"
-        TabButtonIcon.Parent = TabButton
-        TabButtonIcon.BackgroundTransparency = 1
-        TabButtonIcon.Size = UDim2.new(0, 16, 0, 16)
-        TabButtonIcon.Position = UDim2.new(0, 8, 0.5, 0)
-        TabButtonIcon.AnchorPoint = Vector2.new(0, 0.5)
-        TabButtonIcon.Image = "rbxassetid://3926305904"
-        TabButtonIcon.ImageRectOffset = Vector2.new(964, 204)
-        TabButtonIcon.ImageRectSize = Vector2.new(36, 36)
-        TabButtonIcon.ImageColor3 = xVisible and Theme.LightText or Theme.DimText
+        TabButtonPadding.PaddingLeft = UDim.new(0, 0)
+        TabButtonPadding.PaddingRight = UDim.new(0, 0)
 
         Size()
         Tab.ChildAdded:Connect(Size)
@@ -293,9 +282,6 @@ function Library:Create(xHubName, xGameName)
                 if v:IsA("TextButton") then 
                     v.BackgroundColor3 = Theme.SecondaryBackground
                     v.TextColor3 = Theme.DimText
-                    if v:FindFirstChild("TabButtonIcon") then
-                        v.TabButtonIcon.ImageColor3 = Theme.DimText
-                    end
                 end
             end
 
@@ -309,9 +295,6 @@ function Library:Create(xHubName, xGameName)
             }):Play()
             game:GetService("TweenService"):Create(TabButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                 TextColor3 = Theme.LightText
-            }):Play()
-            game:GetService("TweenService"):Create(TabButtonIcon, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                ImageColor3 = Theme.LightText
             }):Play()
         end)
 
@@ -372,7 +355,6 @@ function Library:Create(xHubName, xGameName)
             local Button = Instance.new("TextButton")
             local ButtonCorner = Instance.new("UICorner")
             local ButtonPadding = Instance.new("UIPadding")
-            local ButtonIcon = Instance.new("ImageLabel")
 
             ButtonFrame.Name = tostring(Name).."_Button"
             ButtonFrame.Parent = Tab
@@ -402,17 +384,6 @@ function Library:Create(xHubName, xGameName)
             ButtonPadding.Parent = Button
             ButtonPadding.PaddingLeft = UDim.new(0, 10)
             
-            ButtonIcon.Name = "ButtonIcon"
-            ButtonIcon.Parent = Button
-            ButtonIcon.BackgroundTransparency = 1
-            ButtonIcon.Size = UDim2.new(0, 20, 0, 20)
-            ButtonIcon.Position = UDim2.new(0.95, 0, 0.5, 0)
-            ButtonIcon.AnchorPoint = Vector2.new(1, 0.5)
-            ButtonIcon.Image = "rbxassetid://3926305904"
-            ButtonIcon.ImageRectOffset = Vector2.new(564, 564)
-            ButtonIcon.ImageRectSize = Vector2.new(36, 36)
-            ButtonIcon.ImageColor3 = Theme.LightText
-
             -- Create ripple effect for button
             local function CreateRipple()
                 local Ripple = Instance.new("Frame")
@@ -447,19 +418,10 @@ function Library:Create(xHubName, xGameName)
                     BackgroundColor3 = Theme.AccentColor
                 }):Play()
                 
-                game:GetService("TweenService"):Create(ButtonIcon, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                    ImageColor3 = Theme.LightText,
-                    Size = UDim2.new(0, 18, 0, 18)
-                }):Play()
-                
                 wait(0.1)
                 
                 game:GetService("TweenService"):Create(Button, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
                     BackgroundColor3 = Theme.ContrastBackground
-                }):Play()
-                
-                game:GetService("TweenService"):Create(ButtonIcon, TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                    Size = UDim2.new(0, 20, 0, 20)
                 }):Play()
                 
                 pcall(Callback)
@@ -634,6 +596,7 @@ function Library:Create(xHubName, xGameName)
             local Max = Max or 500
             local Min = Min or 16
             local Value = Min
+            local IsDragging = false
             
             local SliderFrame = Instance.new("Frame")
             local SliderFrameCorner = Instance.new("UICorner")
@@ -683,15 +646,14 @@ function Library:Create(xHubName, xGameName)
             SliderTrailCorner.Parent = SliderTrail
             SliderTrailCorner.CornerRadius = UDim.new(1, 0)
             
-            -- Add a circle handle to the slider for better visual feedback
             SliderCircle.Name = "SliderCircle"
             SliderCircle.Parent = SliderTrail
             SliderCircle.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             SliderCircle.BorderSizePixel = 0
-            SliderCircle.Position = UDim2.new(1, -8, 0.5, -8)
+            SliderCircle.Position = UDim2.new(1, -8, 0.5, 0) -- Adjusted initial position logic slightly
             SliderCircle.Size = UDim2.new(0, 16, 0, 16)
             SliderCircle.ZIndex = 2
-            SliderCircle.AnchorPoint = Vector2.new(0, 0.5)
+            SliderCircle.AnchorPoint = Vector2.new(0.5, 0.5) -- Centered anchor point for better positioning
             
             SliderCircleCorner.CornerRadius = UDim.new(1, 0)
             SliderCircleCorner.Name = "SliderCircleCorner"
@@ -725,86 +687,76 @@ function Library:Create(xHubName, xGameName)
             SliderValue.TextColor3 = Theme.LightText
             SliderValue.TextSize = 16.000
             SliderValue.TextXAlignment = Enum.TextXAlignment.Right
+            SliderValue.TextTransparency = 0.5 -- Start slightly dimmed
 
             SliderValuePadding.Name = "SliderValuePadding"
             SliderValuePadding.Parent = SliderValue
             SliderValuePadding.PaddingRight = UDim.new(0, 10)
 
-            local ms = game.Players.LocalPlayer:GetMouse()
             local uis = game:GetService("UserInputService")
             local mouse = game:GetService("Players").LocalPlayer:GetMouse()
             
-            -- Function to update slider visually
-            local function UpdateSlider(input)
-                local sizeX = math.clamp((input.Position.X - SliderButton.AbsolutePosition.X) / SliderButton.AbsoluteSize.X, 0, 1)
-                SliderTrail:TweenSize(UDim2.new(sizeX, 0, 0, 10), "Out", "Sine", 0.1, true)
+            local function UpdateSliderValue(xPos)
+                local relativeX = math.clamp(xPos - SliderButton.AbsolutePosition.X, 0, SliderButton.AbsoluteSize.X)
+                local sizeX = relativeX / SliderButton.AbsoluteSize.X
                 
-                Value = math.floor(((Max - Min) * sizeX) + Min)
+                Value = math.floor(((Max - Min) * sizeX) + Min + 0.5) -- Add 0.5 for better rounding
                 SliderValue.Text = tostring(Value)
+                SliderTrail.Size = UDim2.new(sizeX, 0, 1, 0)
                 
                 pcall(function()
                     Callback(Value)
                 end)
             end
             
-            -- Handle mouse events for slider interaction
             SliderButton.MouseButton1Down:Connect(function()
+                IsDragging = true
+                SliderValue.TextTransparency = 0 -- Make value fully visible when dragging
+                UpdateSliderValue(mouse.X)
+                
                 local moveConnection
                 local releaseConnection
                 
-                -- Show value immediately
-                SliderValue.TextTransparency = 0
-                
-                -- Initial update
-                UpdateSlider({Position = mouse.Position})
-                
-                -- Handle mouse movement while dragging
                 moveConnection = mouse.Move:Connect(function()
-                    UpdateSlider({Position = mouse.Position})
+                    if IsDragging then
+                        UpdateSliderValue(mouse.X)
+                    end
                 end)
                 
-                -- Handle mouse release
                 releaseConnection = uis.InputEnded:Connect(function(input)
                     if input.UserInputType == Enum.UserInputType.MouseButton1 then
-                        moveConnection:Disconnect()
-                        releaseConnection:Disconnect()
+                        IsDragging = false
+                        if moveConnection then moveConnection:Disconnect() end
+                        if releaseConnection then releaseConnection:Disconnect() end
+                        
+                        -- Keep value visible briefly after drag, then dim if not hovering
+                        task.wait(0.5) 
+                        if not SliderButton.MouseEnter then 
+                             game:GetService("TweenService"):Create(SliderValue, TweenInfo.new(0.3), {TextTransparency = 0.5}):Play()
+                        end
                     end
                 end)
             end)
             
-            -- Hover effects
             SliderButton.MouseEnter:Connect(function()
-                game:GetService("TweenService"):Create(SliderButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                    BackgroundColor3 = Color3.fromRGB(55, 55, 65)
-                }):Play()
-                
-                -- Show slider value on hover
-                game:GetService("TweenService"):Create(SliderValue, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                    TextTransparency = 0
-                }):Play()
+                game:GetService("TweenService"):Create(SliderButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(55, 55, 65)}):Play()
+                game:GetService("TweenService"):Create(SliderValue, TweenInfo.new(0.2), {TextTransparency = 0}):Play() -- Show value on hover
             end)
             
             SliderButton.MouseLeave:Connect(function()
-                game:GetService("TweenService"):Create(SliderButton, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                    BackgroundColor3 = Color3.fromRGB(45, 45, 55)
-                }):Play()
-                
-                -- Hide slider value unless dragging
-                if not uis:IsMouseButtonPressed(Enum.UserInputType.MouseButton1) then
-                    game:GetService("TweenService"):Create(SliderValue, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                        TextTransparency = 0.5
-                    }):Play()
+                game:GetService("TweenService"):Create(SliderButton, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(45, 45, 55)}):Play()
+                if not IsDragging then
+                    game:GetService("TweenService"):Create(SliderValue, TweenInfo.new(0.2), {TextTransparency = 0.5}):Play() -- Dim value if not dragging
                 end
             end)
             
-            -- Return slider function to allow updating
             local SliderFunc = {}
             
             function SliderFunc:SetValue(NewValue)
                 Value = math.clamp(NewValue, Min, Max)
                 local sizeX = (Value - Min) / (Max - Min)
                 
-                SliderTrail:TweenSize(UDim2.new(sizeX, 0, 0, 10), "Out", "Sine", 0.1, true)
+                SliderTrail.Size = UDim2.new(sizeX, 0, 1, 0)
                 SliderValue.Text = tostring(Value)
                 
                 pcall(function()
@@ -812,7 +764,7 @@ function Library:Create(xHubName, xGameName)
                 end)
             end
             
-            -- Initialize with min value
+            -- Initialize visual state based on Min value
             SliderFunc:SetValue(Min)
             
             return SliderFunc
@@ -1021,7 +973,6 @@ function Library:Create(xHubName, xGameName)
             local DropdownFrameCorner = Instance.new("UICorner")
             local DropdownName = Instance.new("TextLabel")
             local DropdownNamePadding = Instance.new("UIPadding")
-            local DropdownIcon = Instance.new("ImageButton")
             local DropdownButton = Instance.new("TextButton")
             local DropList = Instance.new("Frame")
             local DropListLayout = Instance.new("UIListLayout")
@@ -1062,17 +1013,6 @@ function Library:Create(xHubName, xGameName)
             DropdownNamePadding.Name = "DropdownNamePadding"
             DropdownNamePadding.Parent = DropdownName
             DropdownNamePadding.PaddingLeft = UDim.new(0, 10)
-
-            DropdownIcon.Name = "DropdownIcon"
-            DropdownIcon.Parent = DropdownFrame
-            DropdownIcon.BackgroundTransparency = 1.000
-            DropdownIcon.Position = UDim2.new(0.914644599, 0, 0.140659884, 0)
-            DropdownIcon.Size = UDim2.new(0, 25, 0, 25)
-            DropdownIcon.ZIndex = 11
-            DropdownIcon.Image = "rbxassetid://3926305904"
-            DropdownIcon.ImageRectOffset = Vector2.new(604, 684)
-            DropdownIcon.ImageRectSize = Vector2.new(36, 36)
-            DropdownIcon.ImageColor3 = Theme.LightText
 
             DropdownButton.Name = "DropdownButton"
             DropdownButton.Parent = DropdownFrame
@@ -1123,51 +1063,57 @@ function Library:Create(xHubName, xGameName)
                     end
                 end
                 
-                local paddingSize = (optionCount + 1) * DropListLayout.Padding.Offset
-                local contentSize = optionCount * 35 + paddingSize
+                -- Calculate content size based on number of options and padding
+                local optionHeight = 35 -- Assuming fixed height for each option
+                local verticalPadding = DropListPadding.PaddingTop.Offset + DropListPadding.PaddingBottom.Offset
+                local layoutPadding = (optionCount - 1) * DropListLayout.Padding.Offset
+                local contentSize = (optionCount * optionHeight) + verticalPadding + layoutPadding
                 
-                return contentSize
+                return math.max(contentSize, 0) -- Ensure size is not negative
             end
             
             -- Function to handle dropdown open/close
             local function ToggleDropdown()
                 opened = not opened
+                local contentSize = UpdateDropListSize()
+                local targetContainerHeight
+                local targetDropListHeight
                 
                 if opened then
-                    -- Show the dropdown
-                    DropList.Visible = true
-                    local contentSize = UpdateDropListSize()
+                    -- Calculate target heights for open state
+                    targetDropListHeight = contentSize
+                    targetContainerHeight = 35 + targetDropListHeight -- Base height + DropList height
+
+                    -- Make DropList visible before animating
+                    DropList.Visible = true 
                     
-                    -- Animate the dropdown opening
+                    -- Animate the DropdownContainer and DropList sizes simultaneously
+                    game:GetService("TweenService"):Create(DropdownContainer, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                        Size = UDim2.new(0, 408, 0, targetContainerHeight)
+                    }):Play()
                     game:GetService("TweenService"):Create(DropList, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                        Size = UDim2.new(1, 0, 0, contentSize)
+                        Size = UDim2.new(1, 0, 0, targetDropListHeight)
                     }):Play()
-                    
-                    -- Rotate icon
-                    game:GetService("TweenService"):Create(DropdownIcon, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                        Rotation = 180,
-                        ImageColor3 = Theme.AccentColor
-                    }):Play()
-                    
-                    -- Update canvas size for scrolling
+
+                    -- Trigger Tab scroll size update AFTER starting the animation
+                    task.wait(0.01) -- Short delay to allow layout calculation
                     Size()
                 else
-                    -- Animate the dropdown closing
+                    -- Calculate target heights for closed state
+                    targetDropListHeight = 0
+                    targetContainerHeight = 35
+                    
+                    -- Animate the DropdownContainer and DropList sizes simultaneously
+                    game:GetService("TweenService"):Create(DropdownContainer, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+                        Size = UDim2.new(0, 408, 0, targetContainerHeight)
+                    }):Play()
                     game:GetService("TweenService"):Create(DropList, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                        Size = UDim2.new(1, 0, 0, 0)
+                        Size = UDim2.new(1, 0, 0, targetDropListHeight)
                     }):Play()
                     
-                    -- Rotate icon back
-                    game:GetService("TweenService"):Create(DropdownIcon, TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-                        Rotation = 0,
-                        ImageColor3 = Theme.LightText
-                    }):Play()
-                    
-                    -- Wait for animation to complete then hide
-                    wait(0.2)
+                    -- Wait for animation to complete then hide DropList and update scroll size
+                    task.wait(0.2)
                     DropList.Visible = false
-                    
-                    -- Update canvas size for scrolling
                     Size()
                 end
             end
@@ -1293,13 +1239,17 @@ function Library:Create(xHubName, xGameName)
                     end)
                 end
                 
-                -- Update dropdown layout if it's open
+                -- Update dropdown layout size initially and if it's open
+                local initialContentSize = UpdateDropListSize()
                 if opened then
-                    local contentSize = UpdateDropListSize()
-                    DropList.Size = UDim2.new(1, 0, 0, contentSize)
+                    DropdownContainer.Size = UDim2.new(0, 408, 0, 35 + initialContentSize)
+                    DropList.Size = UDim2.new(1, 0, 0, initialContentSize)
                 end
             end
             
+            -- Initialize dropdown options
+            DropdownFunction:UpdateDropdown(Listx)
+
             return DropdownFunction
         end
         return Elements
